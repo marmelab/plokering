@@ -11,8 +11,9 @@ function App() {
     const [friendId, setFriendId] = useState('my friend');
     const [newMessage, setNewMessage] = useState('');
     const [messages, setMessages] = useState('');
+
     const addMessage = (data) => {
-        setMessages(messages + '\n\r' + data)
+        setMessages(previous => previous + '\n\r' + data)
     }
 
     const handlePeerId = (event) => {
@@ -39,15 +40,20 @@ function App() {
             addMessage(`Registered, my peer ID is: {${id}}`);
         });
 
-        /*peer.on("connection", (conn) => {
-            console.log("peer.on(connection)");
+        peer.on("connection", (conn) => {
+            console.log("connection");
+
+            conn.on("data", (data) => {
+                console.log("Message received", data);
+                addMessage(`${conn.peer} : ${data}`);
+            });
 
             conn.on("open", () => {
                 console.log(`Connection with ${conn.peer}`);
                 addMessage(`Connection with ${conn.peer}`);
-                conn.send(`Hello, I'm ${peerId}`);
+                conn.send(`Hello, I'm new here`);
             });
-        });*/
+        });
 
         peer.on('error', (error) => {
             if(!peer?.open){

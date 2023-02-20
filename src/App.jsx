@@ -110,7 +110,7 @@ function App() {
                                 Connection
                             </Typography>
                             <TextField label="My Id" value={peerId} onChange={handlePeerId}/>
-                            <TextField label="My name" value={peerName} onChange={handlePeerName}/>
+                           {/*  <TextField label="My name" value={peerName} onChange={handlePeerName}/> */}
                         </CardContent>
                         <CardActions sx={{justifyContent:"space-between"}}>
                             <Button size="small" disabled={!!peer} onClick={register}>Register to server</Button>

@@ -1,17 +1,14 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { Peer } from "peerjs";
 
 import CONFIG from "./config";
-import { PlaningCards } from "./PlanningCards";
+import { AddPeerZone } from "./AddPeerZone";
+import { ChooseCardZone } from "./ChooseCardZone";
+import { ConnectionZone } from "./ConnectionZone";
+import { LogoZone } from "./LogoZone";
+import { MainZone } from "./MainZone";
+import { SendMessageZone } from "./SendMessageZone";
 
 function App() {
   const [peer, setPeer] = useState(null);
@@ -21,7 +18,8 @@ function App() {
   const [friendId, setFriendId] = useState("my friend id");
   const [friendName, setFriendName] = useState("my friend name");
   const [newMessage, setNewMessage] = useState("");
-  const [card, setCard] = useState(null);
+  const [myCard, setMyCard] = useState(null);
+  const [chosenCards, setChosenCards] = useState({});
   const [messages, setMessages] = useState("");
 
   const addMessage = (data) => {
@@ -124,9 +122,9 @@ function App() {
 
   const sendCardToPeers = () => {
     console.log("Send a message to peer");
-    addMessage(`I choose card ${card}`);
-    connection.send({ name: peerName, card });
-    setCard(null);
+    addMessage(`I choose card ${myCard}`);
+    connection.send({ name: peerName, card: myCard });
+    setMyCard(null);
   };
 
   return (
@@ -140,86 +138,33 @@ function App() {
           width: "20%",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <img src="/icon.svg" width="20%" />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Typography
-            sx={{ fontSize: 30, fontWeight: "bold", paddingBottom: "15px" }}
-            color="text.primary"
-            gutterBottom
-          >
-            Plockering
-          </Typography>
-        </Box>
+        <LogoZone />
         <Box>
-          <Card elevation={4} sx={{ marginBottom: "20px" }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-                color="text.primary"
-                gutterBottom
-              >
-                Connection
-              </Typography>
-              <TextField
-                sx={{ marginBottom: "15px" }}
-                label="My Id"
-                value={peerId}
-                onChange={handlePeerId}
-              />
-              <TextField
-                label="My nickname"
-                value={peerName}
-                onChange={handlePeerName}
-              />
-            </CardContent>
-            <CardActions sx={{ justifyContent: "space-between" }}>
-              <Button size="small" disabled={!!peer} onClick={register}>
-                Register to server
-              </Button>
-              <Button size="small" disabled={!peer} onClick={unRegister}>
-                Unregister
-              </Button>
-            </CardActions>
-          </Card>
+          <ConnectionZone
+            peerId={peerId}
+            peerName={peerName}
+            handlePeerId={handlePeerId}
+            handlePeerName={handlePeerName}
+            peer={peer}
+            register={register}
+            unRegister={unRegister}
+          />
 
-          <Card elevation={4} sx={{ marginBottom: "20px" }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-                color="text.primary"
-                gutterBottom
-              >
-                Add peer
-              </Typography>
-              <TextField
-                sx={{ marginBottom: "15px" }}
-                label="Friend Id"
-                value={friendId}
-                onChange={handleFriendId}
-              />
-              <TextField label="Friend nickname" value={friendName} disabled />
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                disabled={!peer || !!connection}
-                onClick={connectToPeer}
-              >
-                Connect to peer
-              </Button>
-            </CardActions>
-          </Card>
+          <AddPeerZone
+            friendId={friendId}
+            friendName={friendName}
+            handleFriendId={handleFriendId}
+            peer={peer}
+            connection={connection}
+            connectToPeer={connectToPeer}
+          />
         </Box>
       </Box>
+
       <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
-        Messages:
-        <br />
-        <Box component="p" sx={{ whiteSpace: "pre-line" }}>
-          {messages}
-        </Box>
+        <MainZone messages={messages} chosenCards={chosenCards} />
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -229,60 +174,19 @@ function App() {
           width: "20%",
         }}
       >
-        <Card elevation={4} sx={{ marginBottom: "20px" }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-              color="text.primary"
-              gutterBottom
-            >
-              Message
-            </Typography>
-            <TextField
-              label="My message"
-              value={newMessage}
-              onChange={handleNewMessage}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  return sendMessageToPeers();
-                }
-              }}
-              fullWidth
-            />
-          </CardContent>
-          <CardActions>
-            <Button
-              size="small"
-              disabled={!connection}
-              onClick={sendMessageToPeers}
-            >
-              Send message
-            </Button>
-          </CardActions>
-        </Card>
+        <SendMessageZone
+          message={newMessage}
+          handleMessage={handleNewMessage}
+          connection={connection}
+          sendMessageToPeers={sendMessageToPeers}
+        />
 
-        <Card elevation={4} sx={{ marginBottom: "20px" }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-              color="text.primary"
-              gutterBottom
-            >
-              Planing poker
-            </Typography>
-            <PlaningCards card={card} setCard={setCard} />
-          </CardContent>
-          <CardActions>
-            <Button
-              size="small"
-              disabled={!connection || card === null}
-              onClick={sendCardToPeers}
-            >
-              Chose card
-            </Button>
-          </CardActions>
-        </Card>
+        <ChooseCardZone
+          card={myCard}
+          setCard={setMyCard}
+          connection={connection}
+          sendCardToPeers={sendCardToPeers}
+        />
       </Box>
     </Box>
   );

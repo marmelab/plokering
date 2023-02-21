@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { PlaningCards } from "./PlanningCards";
+import { PlanningCards } from "./PlanningCards";
 
 export const ChooseCardZone = ({
   card,
@@ -24,7 +24,7 @@ export const ChooseCardZone = ({
         >
           Planing poker
         </Typography>
-        <PlaningCards card={card} setCard={setCard} />
+        <PlanningCards card={card} setCard={setCard} />
       </CardContent>
       <CardActions>
         <Button

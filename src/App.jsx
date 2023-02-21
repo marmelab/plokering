@@ -55,8 +55,10 @@ function App() {
       addMessage(`${name} : ${message}`);
     }
     if (card !== null && card !== undefined) {
-      console.log(chosenCards, connection.peer, card);
-      setChosenCards((previous) => ({ ...previous, [connection.peer]: card }));
+      setChosenCards((previous) => ({
+        ...previous,
+        [connection.peer]: { card, name },
+      }));
     }
   };
 
@@ -127,7 +129,7 @@ function App() {
     connection.send({ name: peerName, card: myCard });
     setChosenCards((previous) => ({
       ...previous,
-      [peerId]: myCard,
+      [peerId]: { card: myCard, name: peerName },
     }));
     setMyCard(null);
   };
@@ -167,7 +169,12 @@ function App() {
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
-        <MainZone messages={messages} chosenCards={chosenCards} />
+        <MainZone
+          connection={connection}
+          messages={messages}
+          chosenCards={chosenCards}
+          peerId={peerId}
+        />
       </Box>
 
       <Box

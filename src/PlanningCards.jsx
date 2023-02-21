@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 
-import { PlaningCard } from "./PlanningCard";
+import { PlanningCard } from "./PlanningCard";
 
-export const PlaningCards = ({ card, setCard }) => {
+export const PlanningCards = ({ card, setCard }) => {
   const values = [0, 0.5, 1, 2, 3, 5];
 
   return (
@@ -15,7 +15,8 @@ export const PlaningCards = ({ card, setCard }) => {
       }}
     >
       {values.map((item, index) => (
-        <PlaningCard
+        <PlanningCard
+          isMe
           key={index}
           value={item}
           index={index}

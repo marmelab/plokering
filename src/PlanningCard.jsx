@@ -1,11 +1,14 @@
-import { Card } from "@mui/material";
+import { Box, Card } from "@mui/material";
 
-export const PlaningCard = ({
+export const PlanningCard = ({
   value,
   index,
+  isMe,
+  playerName,
   totalNumber,
   selected,
   selectCard,
+  bigCard,
 }) => {
   const middleNumber = totalNumber / 2;
 
@@ -13,20 +16,20 @@ export const PlaningCard = ({
     <Card
       sx={{
         display: "flex",
-        width: "40px",
-        height: "65px",
-        lineHeight: "65px",
+        width: bigCard ? "120px" : "40px",
+        height: bigCard ? "195px" : "65px",
+        lineHeight: bigCard ? "195px" : "65px",
         fontFamily: "Verdana",
-        fontSize: "25px",
+        fontSize: bigCard ? "75px" : "25px",
         fontWeight: "bold",
         marginRight: "-5px",
         justifyContent: "center",
         alignContent: "center",
-        backgroundColor: "orange",
-        color: "indigo",
+        backgroundColor: isMe ? "orange" : "brown",
+        color: isMe ? "indigo" : "orange",
         border: "solid 4px",
-        borderColor: selected ? "indigo" : "orange",
-        cursor: "pointer",
+        borderColor: selected ? "indigo" : isMe ? "orange" : "brown",
+        cursor: selectCard ? "pointer" : "inherit",
         transform: `rotateZ(${
           15 * (index - middleNumber + 0.5)
         }deg)  translateY(${Math.pow(index - middleNumber + 0.5, 2) * 5}px)`,
@@ -34,9 +37,17 @@ export const PlaningCard = ({
           zIndex: 100,
         },
       }}
-      onClick={selectCard}
+      onClick={selectCard || null}
     >
       {value}
+      {bigCard && playerName && (
+        <Box
+          component="p"
+          sx={{ position: "absolute", fontSize: "15px", top: "-97.5px" }}
+        >
+          {isMe ? "Me" : playerName}
+        </Box>
+      )}
     </Card>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { Box, Button, Card, CardActions, CardContent, TextField, Typography} from '@mui/material'
 import { Peer } from "peerjs";
 import CONFIG from './config';
@@ -6,10 +6,12 @@ import CONFIG from './config';
 function App() {
     const [peer, setPeer] = useState(null);
     const [connection, setConnection] = useState(null);
-    const [peerId, setPeerId] = useState('peer id');
-    const [peerName, setPeerName] = useState('peer name');
-    const [friendId, setFriendId] = useState('my friend');
+    const [peerId, setPeerId] = useState('choose my id');
+    const [peerName, setPeerName] = useState('choose my name');
+    const [friendId, setFriendId] = useState('my friend id');
+    const [friendName, setFriendName] = useState('my friend name');
     const [newMessage, setNewMessage] = useState('');
+    const [card, setCard] = useState(null);
     const [messages, setMessages] = useState('');
 
     const addMessage = (data) => {
@@ -32,6 +34,23 @@ function App() {
         setNewMessage(event.target.value);
     }
 
+    const connectionMessage = (conn) => {
+        console.log(`Connection with ${conn.peer}`);
+        addMessage(`Connection with ${conn.peer}`);
+        conn.send({name: peerName, message: `Hello, I'm new here`});
+    };
+
+    const receiveData = ({ name, message, card }) => {
+        console.log("Message received", message || card);
+        setFriendName(name);
+        if (message) {
+            addMessage(`${name} : ${message}`);
+        }
+        if (card) {
+            addMessage(`${name} choose card ${card}`);
+        }
+    };
+
     const register = () => {
         const peer = new Peer(peerId, CONFIG.peerJsServer);
         setPeer(peer);
@@ -41,17 +60,14 @@ function App() {
         });
 
         peer.on("connection", (conn) => {
-            console.log("connection");
+            console.log("Connection");
 
             conn.on("data", (data) => {
-                console.log("Message received", data);
-                addMessage(`${conn.peer} : ${data}`);
+                receiveData(data);
             });
 
             conn.on("open", () => {
-                console.log(`Connection with ${conn.peer}`);
-                addMessage(`Connection with ${conn.peer}`);
-                conn.send(`Hello, I'm new here`);
+                connectionMessage(conn);
             });
         });
 
@@ -70,14 +86,11 @@ function App() {
         setConnection(conn);
 
         conn.on("data", (data) => {
-            console.log("Message received", data);
-            addMessage(`${conn.peer} : ${data}`);
+            receiveData(data);
         });
 
         conn.on("open", () => {
-            console.log(`Connection with ${conn.peer}`);
-            addMessage(`Connection with ${conn.peer}`);
-            conn.send(`Hello, I'm new here`);
+            connectionMessage(conn);
         });
     }
 
@@ -92,17 +105,25 @@ function App() {
         }
     }
 
-    const sendToPeers = () => {
+    const sendMessageToPeers = () => {
         console.log("Send a message to peer");
         addMessage(`Me : ${newMessage}`);
-        connection.send(newMessage);
+        connection.send({name: peerName, message: newMessage});
+        setNewMessage('');
+    }
+
+    const sendCardToPeers = () => {
+        console.log("Send a message to peer");
+        addMessage(`I choose card ${card}`);
+        connection.send({name: peerName, card});
+        setCard(null);
     }
 
     return (
         <Box sx={{display:"flex", flexDirection:"row" }}>
             <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignContent: "center", maxWidth: "30%"}}>
                 <Box sx={{display:"flex",justifyContent:"center"}}>
-                    <img src="/icon.svg" width="30%" />
+                    <img src="/icon.svg" width="20%" />
                 </Box>
                 <Box sx={{display:"flex",justifyContent:"center"}}>
                     <Typography sx={{ fontSize: 30, fontWeight: "bold", paddingBottom: "15px" }} color="text.primary" gutterBottom>
@@ -116,7 +137,7 @@ function App() {
                                 Connection
                             </Typography>
                             <TextField label="My Id" value={peerId} onChange={handlePeerId}/>
-                           {/*  <TextField label="My name" value={peerName} onChange={handlePeerName}/> */}
+                            <TextField label="My nickname" value={peerName} onChange={handlePeerName}/>
                         </CardContent>
                         <CardActions sx={{justifyContent:"space-between"}}>
                             <Button size="small" disabled={!!peer} onClick={register}>Register to server</Button>
@@ -130,6 +151,7 @@ function App() {
                                 Add peer
                             </Typography>
                             <TextField label="Friend Id" value={friendId} onChange={handleFriendId}/>
+                            <TextField label="Friend nickname" value={friendName} disabled/>
                         </CardContent>
                         <CardActions>
                             <Button size="small" disabled={!peer || !!connection} onClick={connectToPeer}>Connect to peer</Button>
@@ -141,10 +163,22 @@ function App() {
                             <Typography sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }} color="text.primary" gutterBottom>
                                 Message
                             </Typography>
-                            <TextField label="my message" value={newMessage} onChange={handleNewMessage} fullWidth/>
+                            <TextField label="My message" value={newMessage} onChange={handleNewMessage} onKeyDown={(event) => { if (event .key === 'Enter') { event.preventDefault(); return sendMessageToPeers(); } }} fullWidth/>
                         </CardContent>
                         <CardActions>
-                            <Button size="small" disabled={!connection} onClick={sendToPeers}>Send message</Button>
+                            <Button size="small" disabled={!connection} onClick={sendMessageToPeers}>Send message</Button>
+                        </CardActions>
+                    </Card>
+
+                    <Card elevation={4} sx={{marginBottom: "20px"}}>
+                        <CardContent>
+                            <Typography sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }} color="text.primary" gutterBottom>
+                                Planing poker
+                            </Typography>
+                            <PlaningCards card={card} setCard={setCard} />
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small" disabled={!connection || card === null} onClick={sendCardToPeers}>Chose card</Button>
                         </CardActions>
                     </Card>
                 </Box>
@@ -158,6 +192,52 @@ function App() {
             </Box>
         </Box>
     )
+}
+
+const PlaningCards = ({card, setCard}) => {
+const values = [0,0.5,1,2,3,5];
+
+    return (
+        <Box sx={{display:"flex", flexDirection:"row"}}>
+            {values.map((item, index) =>
+                 <PlaningCard value={item} index={index} totalNumber={values.length} selected={card === item} selectCard={() => setCard(item)} />
+            )}
+        </Box>
+    );
+}
+
+const PlaningCard = ({value, index, totalNumber, selected, selectCard}) => {
+    const middleNumber = totalNumber/2;
+
+    return (
+        <Card
+            sx={{
+                    display:"flex",
+                    width: "40px",
+                    height: "65px",
+                    lineHeight: "65px",
+                    fontFamily: "Verdana",
+                    fontSize: "25px",
+                    fontWeight: "bold",
+                    marginRight:"-5px",
+                    justifyContent:"center",
+                    alignContent:"center",
+                    backgroundColor: "orange",
+                    color: "indigo",
+                    border: "solid 4px",
+                    borderColor: selected ? "indigo" : "orange",
+                    cursor: "pointer",
+                    transform: `rotateZ(${15*(index - middleNumber + 0.5)}deg) translateY(${Math.abs(index - middleNumber + 0.5) * 4}px)`,
+                    "& :hover": {
+                        zIndex: 100,
+                    }
+
+            }}
+            onClick={selectCard}
+        >
+            {value}
+        </Card>
+    );
 }
 
 export default App

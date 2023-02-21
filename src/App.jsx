@@ -13,9 +13,9 @@ import { SendMessageZone } from "./SendMessageZone";
 function App() {
   const [peer, setPeer] = useState(null);
   const [connection, setConnection] = useState(null);
-  const [peerId, setPeerId] = useState("choose my id");
-  const [peerName, setPeerName] = useState("choose my name");
-  const [friendId, setFriendId] = useState("my friend id");
+  const [peerId, setPeerId] = useState("choose_my_id");
+  const [peerName, setPeerName] = useState("Michel");
+  const [friendId, setFriendId] = useState("my_friend_id");
   const [friendName, setFriendName] = useState("my friend name");
   const [newMessage, setNewMessage] = useState("");
   const [myCard, setMyCard] = useState(null);
@@ -48,14 +48,15 @@ function App() {
     conn.send({ name: peerName, message: `Hello, I'm new here` });
   };
 
-  const receiveData = ({ name, message, card }) => {
-    console.log("Message received", message || card);
+  const receiveData = (connection, { name, message, card }) => {
+    //console.log("Message received", message || card);
     setFriendName(name);
     if (message) {
       addMessage(`${name} : ${message}`);
     }
-    if (card) {
-      addMessage(`${name} choose card ${card}`);
+    if (card !== null && card !== undefined) {
+      console.log(chosenCards, connection.peer, card);
+      setChosenCards((previous) => ({ ...previous, [connection.peer]: card }));
     }
   };
 
@@ -71,7 +72,7 @@ function App() {
       console.log("Connection");
 
       conn.on("data", (data) => {
-        receiveData(data);
+        receiveData(conn, data);
       });
 
       conn.on("open", () => {
@@ -94,7 +95,7 @@ function App() {
     setConnection(conn);
 
     conn.on("data", (data) => {
-      receiveData(data);
+      receiveData(conn, data);
     });
 
     conn.on("open", () => {
@@ -124,6 +125,10 @@ function App() {
     console.log("Send a message to peer");
     addMessage(`I choose card ${myCard}`);
     connection.send({ name: peerName, card: myCard });
+    setChosenCards((previous) => ({
+      ...previous,
+      [peerId]: myCard,
+    }));
     setMyCard(null);
   };
 

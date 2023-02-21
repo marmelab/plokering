@@ -5,7 +5,9 @@ export const MainZone = ({ chosenCards, messages }) => {
     <>
       Cards:
       <br />
-      {JSON.stringify(chosenCards)}
+      {areAllCardsChosen(2, chosenCards)
+        ? JSON.stringify(chosenCards)
+        : "Waiting"}
       <br />
       <br />
       Messages:
@@ -15,4 +17,17 @@ export const MainZone = ({ chosenCards, messages }) => {
       </Box>
     </>
   );
+};
+
+const areAllCardsChosen = (playersNumber, chosenCards) => {
+  const players = Object.keys(chosenCards);
+  if (
+    players.length === playersNumber &&
+    !players.find((player) => {
+      chosenCards[player] === null || chosenCards[player] === undefined;
+    })
+  ) {
+    return true;
+  }
+  return false;
 };

@@ -135,7 +135,7 @@ function App() {
           flexDirection: "column",
           justifyContent: "center",
           alignContent: "center",
-          maxWidth: "30%",
+          width: "20%",
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -160,7 +160,12 @@ function App() {
               >
                 Connection
               </Typography>
-              <TextField label="My Id" value={peerId} onChange={handlePeerId} />
+              <TextField
+                sx={{ marginBottom: "15px" }}
+                label="My Id"
+                value={peerId}
+                onChange={handlePeerId}
+              />
               <TextField
                 label="My nickname"
                 value={peerName}
@@ -187,6 +192,7 @@ function App() {
                 Add peer
               </Typography>
               <TextField
+                sx={{ marginBottom: "15px" }}
                 label="Friend Id"
                 value={friendId}
                 onChange={handleFriendId}
@@ -203,69 +209,78 @@ function App() {
               </Button>
             </CardActions>
           </Card>
-
-          <Card elevation={4} sx={{ marginBottom: "20px" }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-                color="text.primary"
-                gutterBottom
-              >
-                Message
-              </Typography>
-              <TextField
-                label="My message"
-                value={newMessage}
-                onChange={handleNewMessage}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    return sendMessageToPeers();
-                  }
-                }}
-                fullWidth
-              />
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                disabled={!connection}
-                onClick={sendMessageToPeers}
-              >
-                Send message
-              </Button>
-            </CardActions>
-          </Card>
-
-          <Card elevation={4} sx={{ marginBottom: "20px" }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-                color="text.primary"
-                gutterBottom
-              >
-                Planing poker
-              </Typography>
-              <PlaningCards card={card} setCard={setCard} />
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                disabled={!connection || card === null}
-                onClick={sendCardToPeers}
-              >
-                Chose card
-              </Button>
-            </CardActions>
-          </Card>
         </Box>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
         Messages:
         <br />
         <Box component="p" sx={{ whiteSpace: "pre-line" }}>
           {messages}
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+          width: "20%",
+        }}
+      >
+        <Card elevation={4} sx={{ marginBottom: "20px" }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
+              color="text.primary"
+              gutterBottom
+            >
+              Message
+            </Typography>
+            <TextField
+              label="My message"
+              value={newMessage}
+              onChange={handleNewMessage}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  return sendMessageToPeers();
+                }
+              }}
+              fullWidth
+            />
+          </CardContent>
+          <CardActions>
+            <Button
+              size="small"
+              disabled={!connection}
+              onClick={sendMessageToPeers}
+            >
+              Send message
+            </Button>
+          </CardActions>
+        </Card>
+
+        <Card elevation={4} sx={{ marginBottom: "20px" }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
+              color="text.primary"
+              gutterBottom
+            >
+              Planing poker
+            </Typography>
+            <PlaningCards card={card} setCard={setCard} />
+          </CardContent>
+          <CardActions>
+            <Button
+              size="small"
+              disabled={!connection || card === null}
+              onClick={sendCardToPeers}
+            >
+              Chose card
+            </Button>
+          </CardActions>
+        </Card>
       </Box>
     </Box>
   );

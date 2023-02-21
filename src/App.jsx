@@ -134,6 +134,11 @@ function App() {
     setMyCard(null);
   };
 
+  const resetCards = () => {
+    setMyCard(null);
+    setChosenCards({});
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
       <Box
@@ -174,6 +179,7 @@ function App() {
           messages={messages}
           chosenCards={chosenCards}
           peerId={peerId}
+          resetCards={resetCards}
         />
       </Box>
 

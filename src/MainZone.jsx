@@ -1,8 +1,14 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 
 import { PlanningCard } from "./PlanningCard";
 
-export const MainZone = ({ connection, chosenCards, messages, peerId }) => {
+export const MainZone = ({
+  connection,
+  chosenCards,
+  messages,
+  peerId,
+  resetCards,
+}) => {
   return (
     <>
       {connection ? (
@@ -11,25 +17,41 @@ export const MainZone = ({ connection, chosenCards, messages, peerId }) => {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "center",
                 alignContent: "center",
-                marginTop: "50px",
               }}
             >
-              {Object.keys(chosenCards).map((player, index) => {
-                return (
-                  <PlanningCard
-                    key={index}
-                    bigCard
-                    value={chosenCards[player].card}
-                    isMe={peerId === player}
-                    playerName={chosenCards[player].name}
-                    index={index}
-                    totalNumber={Object.keys(chosenCards).length}
-                  />
-                );
-              })}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  marginTop: "50px",
+                }}
+              >
+                {Object.keys(chosenCards).map((player, index) => {
+                  return (
+                    <PlanningCard
+                      key={index}
+                      bigCard
+                      value={chosenCards[player].card}
+                      isMe={peerId === player}
+                      playerName={chosenCards[player].name}
+                      index={index}
+                      totalNumber={Object.keys(chosenCards).length}
+                    />
+                  );
+                })}
+              </Box>
+              <Button
+                size="small"
+                disabled={!areAllCardsChosen(2, chosenCards)}
+                onClick={resetCards}
+              >
+                Next estimation
+              </Button>
             </Box>
           ) : (
             <Box

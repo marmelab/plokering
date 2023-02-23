@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Box } from "@mui/material";
 import { Peer } from "peerjs";
 
+import { ADMIN_CODE, SELF_CODE, ID_PREFIX } from "./constants";
 import CONFIG from "./config";
 import { AddPeerZone } from "./AddPeerZone";
 import { ChooseCardZone } from "./ChooseCardZone";
@@ -10,28 +11,31 @@ import { LogoZone } from "./LogoZone";
 import { MainZone } from "./MainZone";
 import { SendMessageZone } from "./SendMessageZone";
 
-function App() {
+const App = () => {
   const [peer, setPeer] = useState(null);
-  const [connection, setConnection] = useState(null);
-  const [peerId, setPeerId] = useState("choose_my_id");
-  const [peerName, setPeerName] = useState("Michel");
-  const [friendId, setFriendId] = useState("my_friend_id");
-  const [friendName, setFriendName] = useState("my friend name");
+  const [myPeerId, setMyPeerId] = useState("123");
+  const [myName, setMyName] = useState("Michel");
   const [newMessage, setNewMessage] = useState("");
   const [myCard, setMyCard] = useState(null);
   const [chosenCards, setChosenCards] = useState({});
-  const [messages, setMessages] = useState("");
+  const [messages, setMessages] = useState([]);
 
-  const addMessage = (data) => {
-    setMessages((previous) => previous + "\n\r" + data);
+  const [connection, setConnection] = useState(null);
+  const [friendId, setFriendId] = useState("321");
+  const [friendName, setFriendName] = useState("my friend name");
+
+  const addMessage = (message) => {
+    setMessages((previousMessages) => {
+      return [...previousMessages, message];
+    });
   };
 
   const handlePeerId = (event) => {
-    setPeerId(event.target.value);
+    setMyPeerId(event.target.value);
   };
 
   const handlePeerName = (event) => {
-    setPeerName(event.target.value);
+    setMyName(event.target.value);
   };
 
   const handleFriendId = (event) => {
@@ -43,16 +47,16 @@ function App() {
   };
 
   const connectionMessage = (conn) => {
-    console.log(`Connection with ${conn.peer}`);
-    addMessage(`Connection with ${conn.peer}`);
-    conn.send({ name: peerName, message: `Hello, I'm new here` });
+    console.log(`Connection with [${conn.peer}]`);
+    addMessage({ author: ADMIN_CODE, text: `Connection with [${conn.peer}]` });
+    conn.send({ name: myName, message: `Hello, I'm new here` });
   };
 
   const receiveData = (connection, { name, message, card }) => {
     //console.log("Message received", message || card);
     setFriendName(name);
     if (message) {
-      addMessage(`${name} : ${message}`);
+      addMessage({ author: name, text: message });
     }
     if (card !== null && card !== undefined) {
       setChosenCards((previous) => ({
@@ -63,11 +67,14 @@ function App() {
   };
 
   const register = () => {
-    const peer = new Peer(peerId, CONFIG.peerJsServer);
+    const peer = new Peer(`${ID_PREFIX}_${myPeerId}`, CONFIG.peerJsServer);
     setPeer(peer);
     peer.on("open", (id) => {
       console.log("Registered");
-      addMessage(`Registered, my peer ID is: {${id}}`);
+      addMessage({
+        author: ADMIN_CODE,
+        text: `Registered, my peer ID is: [${id}]`,
+      });
     });
 
     peer.on("connection", (conn) => {
@@ -88,12 +95,12 @@ function App() {
         setConnection(null);
       }
       console.error(error);
-      addMessage(`Error : ${error.message}`);
+      addMessage({ author: ADMIN_CODE, text: `Error : ${error.message}` });
     });
   };
 
   const connectToPeer = () => {
-    let conn = peer.connect(friendId);
+    let conn = peer.connect(`${ID_PREFIX}_${friendId}`);
     setConnection(conn);
 
     conn.on("data", (data) => {
@@ -112,24 +119,26 @@ function App() {
       setPeer(null);
       setConnection(null);
       console.log("Unregistered");
-      addMessage(`Unregistered, all connections closed`);
+      addMessage({
+        author: ADMIN_CODE,
+        text: `Unregistered, all connections closed`,
+      });
     }
   };
 
   const sendMessageToPeers = () => {
     console.log("Send a message to peer");
-    addMessage(`Me : ${newMessage}`);
-    connection.send({ name: peerName, message: newMessage });
+    addMessage({ author: SELF_CODE, text: newMessage });
+    connection.send({ name: myName, message: newMessage });
     setNewMessage("");
   };
 
   const sendCardToPeers = () => {
     console.log("Send a message to peer");
-    addMessage(`I choose card ${myCard}`);
-    connection.send({ name: peerName, card: myCard });
+    connection.send({ name: myName, card: myCard });
     setChosenCards((previous) => ({
       ...previous,
-      [peerId]: { card: myCard, name: peerName },
+      [myPeerId]: { card: myCard, name: myName },
     }));
     setMyCard(null);
   };
@@ -153,8 +162,8 @@ function App() {
         <LogoZone />
         <Box>
           <ConnectionZone
-            peerId={peerId}
-            peerName={peerName}
+            peerId={myPeerId}
+            peerName={myName}
             handlePeerId={handlePeerId}
             handlePeerName={handlePeerName}
             peer={peer}
@@ -178,7 +187,7 @@ function App() {
           connection={connection}
           messages={messages}
           chosenCards={chosenCards}
-          peerId={peerId}
+          peerId={myPeerId}
           resetCards={resetCards}
         />
       </Box>
@@ -208,6 +217,6 @@ function App() {
       </Box>
     </Box>
   );
-}
+};
 
 export default App;

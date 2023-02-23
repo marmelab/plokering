@@ -1,5 +1,12 @@
 import { Box, Card } from "@mui/material";
 
+import {
+  MY_COLOR,
+  MY_BACK_COLOR,
+  FRIEND_COLOR,
+  FRIEND_BACK_COLOR,
+} from "./constants";
+
 export const PlanningCard = ({
   value,
   index,
@@ -25,10 +32,14 @@ export const PlanningCard = ({
         marginRight: "-5px",
         justifyContent: "center",
         alignContent: "center",
-        backgroundColor: isMe ? "orange" : "brown",
-        color: isMe ? "indigo" : "orange",
+        backgroundColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
+        color: isMe ? MY_COLOR : FRIEND_COLOR,
         border: "solid 4px",
-        borderColor: selected ? "indigo" : isMe ? "orange" : "brown",
+        borderColor: selected
+          ? MY_COLOR
+          : isMe
+          ? MY_BACK_COLOR
+          : FRIEND_BACK_COLOR,
         cursor: selectCard ? "pointer" : "inherit",
         transform: `rotateZ(${
           15 * (index - middleNumber + 0.5)

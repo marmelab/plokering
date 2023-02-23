@@ -1,5 +1,8 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
+import { AwaitConnection } from "./AwaitConnection";
+import { AwaitVoters } from "./AwaitVoters";
+import { MessagesZone } from "./MessagesZone";
 import { PlanningCard } from "./PlanningCard";
 
 export const MainZone = ({
@@ -9,129 +12,64 @@ export const MainZone = ({
   peerId,
   resetCards,
 }) => {
+  if (!connection) {
+    return (
+      <Container messages={messages}>
+        <AwaitConnection />
+      </Container>
+    );
+  }
+
+  if (!areAllCardsChosen(2, chosenCards)) {
+    return (
+      <Container messages={messages}>
+        <AwaitVoters />
+      </Container>
+    );
+  }
+
   return (
-    <>
-      {connection ? (
-        <>
-          {areAllCardsChosen(2, chosenCards) ? (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  marginTop: "50px",
-                }}
-              >
-                {Object.keys(chosenCards).map((player, index) => {
-                  return (
-                    <PlanningCard
-                      key={index}
-                      bigCard
-                      value={chosenCards[player].card}
-                      isMe={peerId === player}
-                      playerName={chosenCards[player].name}
-                      index={index}
-                      totalNumber={Object.keys(chosenCards).length}
-                    />
-                  );
-                })}
-              </Box>
-              <Button
-                size="small"
-                disabled={!areAllCardsChosen(2, chosenCards)}
-                onClick={resetCards}
-              >
-                Next estimation
-              </Button>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  paddingTop: "50px",
-                  paddingBottom: "50px",
-                  textAlign: "center",
-                }}
-                color="text.primary"
-                gutterBottom
-              >
-                Waiting for others players
-              </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <CircularProgress />
-              </Box>
-            </Box>
-          )}
-          <br />
-          <br />
-          <Typography
-            sx={{
-              fontWeight: "bold",
-              paddingTop: "50px",
-            }}
-            color="text.primary"
-            gutterBottom
-          >
-            Messages:
-          </Typography>
-          <Box
-            component="p"
-            sx={{
-              whiteSpace: "pre-line",
-              maxHeight: "250px",
-              maxWidth: "500px",
-              overflowY: "scroll",
-            }}
-          >
-            {messages}
-          </Box>
-        </>
-      ) : (
+    <Container messages={messages}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             justifyContent: "center",
             alignContent: "center",
+            marginTop: "50px",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: 20,
-              fontWeight: "bold",
-              paddingTop: "50px",
-              paddingBottom: "50px",
-              textAlign: "center",
-            }}
-            color="text.primary"
-            gutterBottom
-          >
-            Please connect with people
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <img src="/team.svg" width="30%" />
-          </Box>
+          {Object.keys(chosenCards).map((player, index) => {
+            return (
+              <PlanningCard
+                key={index}
+                bigCard
+                value={chosenCards[player].card}
+                isMe={peerId === player}
+                playerName={chosenCards[player].name}
+                index={index}
+                totalNumber={Object.keys(chosenCards).length}
+              />
+            );
+          })}
         </Box>
-      )}
-    </>
+        <Button
+          size="small"
+          disabled={!areAllCardsChosen(2, chosenCards)}
+          onClick={resetCards}
+        >
+          Next estimation
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
@@ -146,4 +84,13 @@ const areAllCardsChosen = (playersNumber, chosenCards) => {
     return true;
   }
   return false;
+};
+
+const Container = ({ children, messages }) => {
+  return (
+    <>
+      {children}
+      <MessagesZone messages={messages} />
+    </>
+  );
 };

@@ -27,6 +27,8 @@ export const AddPeerZone = ({
         </Typography>
         <TextField
           sx={{ marginBottom: "15px" }}
+          type="number"
+          step="1"
           label="Friend Id"
           value={friendId}
           onChange={handleFriendId}

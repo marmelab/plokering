@@ -28,6 +28,8 @@ export const ConnectionZone = ({
         </Typography>
         <TextField
           sx={{ marginBottom: "15px" }}
+          type="number"
+          step="1"
           label="My Id"
           value={peerId}
           onChange={handlePeerId}

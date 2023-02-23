@@ -1,11 +1,7 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, CardActions, CardContent, TextField } from "@mui/material";
+
+import { Card } from "./uiComponents/Card";
+import { CardTitle } from "./uiComponents/CardTitle";
 
 export const ConnectionZone = ({
   peerId,
@@ -17,15 +13,9 @@ export const ConnectionZone = ({
   unRegister,
 }) => {
   return (
-    <Card elevation={4} sx={{ marginBottom: "20px" }}>
+    <Card>
       <CardContent>
-        <Typography
-          sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-          color="text.primary"
-          gutterBottom
-        >
-          Connection
-        </Typography>
+        <CardTitle>Connection</CardTitle>
         <TextField
           sx={{ marginBottom: "15px" }}
           type="number"

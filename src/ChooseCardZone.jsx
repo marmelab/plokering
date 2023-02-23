@@ -1,11 +1,7 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Button, CardActions, CardContent } from "@mui/material";
 
+import { Card } from "./uiComponents/Card";
+import { CardTitle } from "./uiComponents/CardTitle";
 import { PlanningCards } from "./PlanningCards";
 
 export const ChooseCardZone = ({
@@ -15,15 +11,9 @@ export const ChooseCardZone = ({
   sendCardToPeers,
 }) => {
   return (
-    <Card elevation={4} sx={{ marginBottom: "20px" }}>
+    <Card>
       <CardContent>
-        <Typography
-          sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-          color="text.primary"
-          gutterBottom
-        >
-          Planing poker
-        </Typography>
+        <CardTitle>Planing poker</CardTitle>
         <PlanningCards card={card} setCard={setCard} />
       </CardContent>
       <CardActions>

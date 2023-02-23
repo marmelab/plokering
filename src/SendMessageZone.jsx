@@ -1,11 +1,7 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, CardActions, CardContent, TextField } from "@mui/material";
+
+import { Card } from "./uiComponents/Card";
+import { CardTitle } from "./uiComponents/CardTitle";
 
 export const SendMessageZone = ({
   message,
@@ -14,15 +10,9 @@ export const SendMessageZone = ({
   sendMessageToPeers,
 }) => {
   return (
-    <Card elevation={4} sx={{ marginBottom: "20px" }}>
+    <Card>
       <CardContent>
-        <Typography
-          sx={{ fontSize: 20, fontWeight: "bold", paddingBottom: "15px" }}
-          color="text.primary"
-          gutterBottom
-        >
-          Message
-        </Typography>
+        <CardTitle>Message</CardTitle>
         <TextField
           label="My message"
           value={message}

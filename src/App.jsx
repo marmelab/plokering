@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { Peer } from "peerjs";
 
@@ -21,6 +21,12 @@ const App = () => {
   const [messages, setMessages] = useState([]);
 
   const [friendsList, setFriendsList] = useState({});
+
+  useEffect(() => {
+    if (friendsList && Object.keys(friendsList).length) {
+      transmitNewConnections(friendsList);
+    }
+  }, [Object.keys(friendsList).length]);
 
   const addMessage = (message) => {
     setMessages((previousMessages) => [...previousMessages, message]);
@@ -60,7 +66,7 @@ const App = () => {
 
   const receiveData = (
     connection,
-    { name, message, card, newFriend },
+    { name, message, card, newFriends },
     peer
   ) => {
     updateFriendName(name, connection.peer);
@@ -73,10 +79,13 @@ const App = () => {
         [connection.peer]: { card, name },
       }));
     }
-    if (newFriend) {
-      if (!friendsList[newFriend]) {
-        connectToPeer(newFriend, peer)();
-      }
+    if (newFriends && newFriends.length) {
+      console.log("newFriends : ", newFriends);
+      newFriends.map((newFriend) => {
+        if (!friendsList[newFriend]) {
+          connectToPeer(newFriend, peer)();
+        }
+      });
     }
   };
 
@@ -101,7 +110,7 @@ const App = () => {
       conn.on("open", () => {
         setFriendsList((previous) => ({
           ...previous,
-          [conn.peer]: { name: "**new**", connection: conn },
+          [conn.peer]: { name: `[${conn.peer}]`, connection: conn },
         }));
         connectionMessage(conn);
       });
@@ -129,7 +138,6 @@ const App = () => {
         ...previous,
         [conn.peer]: { name: `[${conn.peer}]`, connection: conn },
       }));
-      transmitNewConnection(friendsList, conn.peer);
       connectionMessage(conn);
     });
   };
@@ -148,9 +156,16 @@ const App = () => {
     }
   };
 
-  const transmitNewConnection = (friendsList, newFriendId) => {
-    Object.values(friendsList).map((friend) => {
-      friend.connection.send({ name: myName, newFriend: newFriendId });
+  const transmitNewConnections = (friendsList) => {
+    console.log("transmitNewConnections", friendsList);
+    Object.keys(friendsList).map((friendId) => {
+      const newFriendsList = Object.keys(friendsList).filter(
+        (key) => key !== friendId
+      );
+      friendsList[friendId].connection.send({
+        name: myName,
+        newFriends: newFriendsList,
+      });
     });
   };
 

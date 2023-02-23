@@ -4,6 +4,7 @@ import { Peer } from "peerjs";
 
 import { ADMIN_CODE, SELF_CODE, ID_PREFIX } from "./constants";
 import CONFIG from "./config";
+import { getRandomId, getRandomNickname } from "./getIdentity";
 import { AddPeerZone } from "./AddPeerZone";
 import { ChooseCardZone } from "./ChooseCardZone";
 import { ConnectionZone } from "./ConnectionZone";
@@ -13,16 +14,16 @@ import { SendMessageZone } from "./SendMessageZone";
 
 const App = () => {
   const [peer, setPeer] = useState(null);
-  const [myPeerId, setMyPeerId] = useState("123");
-  const [myName, setMyName] = useState("Michel");
+  const [myPeerId, setMyPeerId] = useState(getRandomId());
+  const [myName, setMyName] = useState(getRandomNickname());
   const [newMessage, setNewMessage] = useState("");
   const [myCard, setMyCard] = useState(null);
   const [chosenCards, setChosenCards] = useState({});
   const [messages, setMessages] = useState([]);
 
   const [connection, setConnection] = useState(null);
-  const [friendId, setFriendId] = useState("321");
-  const [friendName, setFriendName] = useState("my friend name");
+  const [friendId, setFriendId] = useState(getRandomId());
+  const [friendName, setFriendName] = useState("My friend name");
 
   const addMessage = (message) => {
     setMessages((previousMessages) => {
@@ -79,6 +80,7 @@ const App = () => {
 
     peer.on("connection", (conn) => {
       console.log("Connection");
+      setConnection(conn);
 
       conn.on("data", (data) => {
         receiveData(conn, data);

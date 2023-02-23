@@ -7,6 +7,7 @@ import { PlanningCard } from "./PlanningCard";
 
 export const MainZone = ({
   connectionOk,
+  friendsList,
   chosenCards,
   messages,
   peerId,
@@ -20,7 +21,7 @@ export const MainZone = ({
     );
   }
 
-  if (!areAllCardsChosen(2, chosenCards)) {
+  if (!areAllCardsChosen(friendsList, chosenCards)) {
     return (
       <Container messages={messages}>
         <AwaitVoters />
@@ -44,7 +45,7 @@ export const MainZone = ({
             flexDirection: "row",
             justifyContent: "center",
             alignContent: "center",
-            marginTop: "50px",
+            margin: "50px 0",
           }}
         >
           {Object.keys(chosenCards).map((player, index) => {
@@ -63,7 +64,7 @@ export const MainZone = ({
         </Box>
         <Button
           size="small"
-          disabled={!areAllCardsChosen(2, chosenCards)}
+          disabled={!areAllCardsChosen(friendsList, chosenCards)}
           onClick={resetCards}
         >
           Next estimation
@@ -73,7 +74,8 @@ export const MainZone = ({
   );
 };
 
-const areAllCardsChosen = (playersNumber, chosenCards) => {
+const areAllCardsChosen = (friendsList, chosenCards) => {
+  const playersNumber = 1 + Object.keys(friendsList || {}).length;
   const players = Object.keys(chosenCards);
   if (
     players.length === playersNumber &&

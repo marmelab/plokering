@@ -43,7 +43,9 @@ export const PlanningCard = ({
         cursor: selectCard ? "pointer" : "inherit",
         transform: `rotateZ(${
           15 * (index - middleNumber + 0.5)
-        }deg)  translateY(${Math.pow(index - middleNumber + 0.5, 2) * 5}px)`,
+        }deg)  translateY(${
+          Math.pow(index - middleNumber + 0.5, 2) * (bigCard ? 15 : 5)
+        }px)`,
         "&:hover": {
           zIndex: 100,
         },

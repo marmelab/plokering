@@ -1,13 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
-import {
-  ADMIN_CODE,
-  SELF_CODE,
-  MY_COLOR,
-  MY_BACK_COLOR,
-  FRIEND_COLOR,
-  FRIEND_BACK_COLOR,
-} from "./constants";
+import { NameChip } from "./uiComponents/NameChip";
+import { ADMIN_CODE, SELF_CODE } from "./constants";
 
 export const MessagesZone = ({ messages }) => {
   return (
@@ -68,22 +62,7 @@ const Message = ({ author, message, isAdmin, isMe }) => {
         overflowAnchor: "none",
       }}
     >
-      {!isAdmin && (
-        <Box
-          sx={{
-            display: "inline-flex",
-            fontWeight: "bold",
-            overflowAnchor: "none",
-            backgroundColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
-            color: isMe ? MY_COLOR : FRIEND_COLOR,
-            borderRadius: "4px",
-            border: "solid 4px",
-            borderColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
-          }}
-        >
-          {author}
-        </Box>
-      )}
+      {!isAdmin && <NameChip isMe={isMe} name={author} />}
       <Box
         component="p"
         sx={{

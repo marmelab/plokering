@@ -11,6 +11,7 @@ import { ID_PREFIX } from "./constants";
 import { getRandomId } from "./getIdentity";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
+import { NameChip } from "./uiComponents/NameChip";
 
 export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
   const [friendId, setFriendId] = useState(getRandomId());
@@ -22,26 +23,39 @@ export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
     <Card>
       <CardContent>
         <CardTitle>Add peer</CardTitle>
-        <TextField
-          sx={{ marginBottom: "15px" }}
-          type="number"
-          step="1"
-          label="Friend Id"
-          value={friendId}
-          onChange={handleFriendId}
-        />
-        {Object.keys(friendsList).map((friendId, index) => {
-          return (
-            <Box key={index}>
-              {friendsList[friendId].name || `[${friendId}]`}
-            </Box>
-          );
-        })}
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <TextField
+            sx={{ marginBottom: "15px" }}
+            type="number"
+            step="1"
+            label="Friend Id"
+            value={friendId}
+            onChange={handleFriendId}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              margin: "0 10px",
+              alignContent: "flex-end",
+              justifyContent: "between-start",
+            }}
+          >
+            {Object.keys(friendsList).map((friendId, index) => {
+              return (
+                <NameChip
+                  key={index}
+                  name={friendsList[friendId].name || `[${friendId}]`}
+                />
+              );
+            })}
+          </Box>
+        </Box>
       </CardContent>
       <CardActions>
         <Button
           size="small"
-          disabled={!peer || !!Object.keys(friendsList).length}
+          disabled={!peer || !friendId}
           onClick={connectToPeer(`${ID_PREFIX}_${friendId}`)}
         >
           Connect to peer

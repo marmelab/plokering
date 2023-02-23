@@ -1,14 +1,30 @@
 import { Button, CardActions, CardContent, TextField } from "@mui/material";
+import { useState } from "react";
 
+import { SELF_CODE } from "./constants";
+import { isConnectionOpened } from "./isConnectionOpened";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 
-export const SendMessageZone = ({
-  message,
-  handleMessage,
-  connectionOk,
-  sendMessageToPeers,
-}) => {
+export const SendMessageZone = ({ myName, friendsList, addMessage }) => {
+  const [message, setMessage] = useState("");
+
+  const handleMessage = (event) => {
+    setMessage(event.target.value);
+  };
+
+  const sendMessageToPeers = () => {
+    console.log("Send a message to peer");
+    addMessage({ author: SELF_CODE, text: message });
+    Object.keys(friendsList).map((friendId) =>
+      friendsList[friendId].connection.send({
+        name: myName,
+        message: message,
+      })
+    );
+    setMessage("");
+  };
+
   return (
     <Card>
       <CardContent>
@@ -29,7 +45,7 @@ export const SendMessageZone = ({
       <CardActions>
         <Button
           size="small"
-          disabled={!connectionOk}
+          disabled={!isConnectionOpened(friendsList) || !message}
           onClick={sendMessageToPeers}
         >
           Send message

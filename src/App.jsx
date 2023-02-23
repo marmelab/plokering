@@ -58,7 +58,11 @@ const App = () => {
     conn.send({ name: myName, message: `Hello, I'm new here` });
   };
 
-  const receiveData = (connection, { name, message, card }) => {
+  const receiveData = (
+    connection,
+    { name, message, card, newFriend },
+    peer
+  ) => {
     updateFriendName(name, connection.peer);
     if (message) {
       addMessage({ author: name, text: message });
@@ -68,6 +72,11 @@ const App = () => {
         ...previous,
         [connection.peer]: { card, name },
       }));
+    }
+    if (newFriend) {
+      if (!friendsList[newFriend]) {
+        connectToPeer(newFriend, peer)();
+      }
     }
   };
 
@@ -84,16 +93,16 @@ const App = () => {
 
     peer.on("connection", (conn) => {
       console.log("Connection");
-      setFriendsList((previous) => ({
-        ...previous,
-        [conn.peer]: { name: "**new**", connection: conn },
-      }));
 
       conn.on("data", (data) => {
-        receiveData(conn, data);
+        receiveData(conn, data, peer);
       });
 
       conn.on("open", () => {
+        setFriendsList((previous) => ({
+          ...previous,
+          [conn.peer]: { name: "**new**", connection: conn },
+        }));
         connectionMessage(conn);
       });
     });
@@ -108,11 +117,11 @@ const App = () => {
     });
   };
 
-  const connectToPeer = (friendId) => () => {
-    let conn = peer.connect(friendId);
+  const connectToPeer = (friendId, peerLocal) => () => {
+    let conn = (peer || peerLocal).connect(friendId);
 
     conn.on("data", (data) => {
-      receiveData(conn, data);
+      receiveData(conn, data, peer);
     });
 
     conn.on("open", () => {
@@ -120,6 +129,7 @@ const App = () => {
         ...previous,
         [conn.peer]: { name: `[${conn.peer}]`, connection: conn },
       }));
+      transmitNewConnection(friendsList, conn.peer);
       connectionMessage(conn);
     });
   };
@@ -136,6 +146,12 @@ const App = () => {
         text: `Unregistered, all connections closed`,
       });
     }
+  };
+
+  const transmitNewConnection = (friendsList, newFriendId) => {
+    Object.values(friendsList).map((friend) => {
+      friend.connection.send({ name: myName, newFriend: newFriendId });
+    });
   };
 
   return (

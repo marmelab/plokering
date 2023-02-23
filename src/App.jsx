@@ -21,14 +21,10 @@ const App = () => {
   const [chosenCards, setChosenCards] = useState({});
   const [messages, setMessages] = useState([]);
 
-  const [connection, setConnection] = useState(null);
-  const [friendId, setFriendId] = useState(getRandomId());
-  const [friendName, setFriendName] = useState("My friend name");
+  const [friendsList, setFriendsList] = useState({});
 
   const addMessage = (message) => {
-    setMessages((previousMessages) => {
-      return [...previousMessages, message];
-    });
+    setMessages((previousMessages) => [...previousMessages, message]);
   };
 
   const handlePeerId = (event) => {
@@ -39,12 +35,15 @@ const App = () => {
     setMyName(event.target.value);
   };
 
-  const handleFriendId = (event) => {
-    setFriendId(event.target.value);
-  };
-
   const handleNewMessage = (event) => {
     setNewMessage(event.target.value);
+  };
+
+  const updateFriendName = (name, friendId) => {
+    setFriendsList((previous) => ({
+      ...previous,
+      [friendId]: { ...previous[friendId], name },
+    }));
   };
 
   const connectionMessage = (conn) => {
@@ -54,8 +53,7 @@ const App = () => {
   };
 
   const receiveData = (connection, { name, message, card }) => {
-    //console.log("Message received", message || card);
-    setFriendName(name);
+    updateFriendName(name, connection.peer);
     if (message) {
       addMessage({ author: name, text: message });
     }
@@ -80,7 +78,10 @@ const App = () => {
 
     peer.on("connection", (conn) => {
       console.log("Connection");
-      setConnection(conn);
+      setFriendsList((previous) => ({
+        ...previous,
+        [conn.peer]: { name: "**new**", connection: conn },
+      }));
 
       conn.on("data", (data) => {
         receiveData(conn, data);
@@ -94,16 +95,20 @@ const App = () => {
     peer.on("error", (error) => {
       if (!peer?.open) {
         setPeer(null);
-        setConnection(null);
+        setFriendsList({});
       }
       console.error(error);
       addMessage({ author: ADMIN_CODE, text: `Error : ${error.message}` });
     });
   };
 
-  const connectToPeer = () => {
-    let conn = peer.connect(`${ID_PREFIX}_${friendId}`);
-    setConnection(conn);
+  const connectToPeer = (friendId) => () => {
+    let conn = peer.connect(friendId);
+
+    setFriendsList((previous) => ({
+      ...previous,
+      [conn.peer]: { name: "**new**", connection: conn },
+    }));
 
     conn.on("data", (data) => {
       receiveData(conn, data);
@@ -119,7 +124,7 @@ const App = () => {
       peer.disconnect();
       peer.destroy();
       setPeer(null);
-      setConnection(null);
+      setFriendsList({});
       console.log("Unregistered");
       addMessage({
         author: ADMIN_CODE,
@@ -131,16 +136,23 @@ const App = () => {
   const sendMessageToPeers = () => {
     console.log("Send a message to peer");
     addMessage({ author: SELF_CODE, text: newMessage });
-    connection.send({ name: myName, message: newMessage });
+    Object.keys(friendsList).map((friendId) =>
+      friendsList[friendId].connection.send({
+        name: myName,
+        message: newMessage,
+      })
+    );
     setNewMessage("");
   };
 
   const sendCardToPeers = () => {
     console.log("Send a message to peer");
-    connection.send({ name: myName, card: myCard });
+    Object.keys(friendsList).map((friendId) =>
+      friendsList[friendId].connection.send({ name: myName, card: myCard })
+    );
     setChosenCards((previous) => ({
       ...previous,
-      [myPeerId]: { card: myCard, name: myName },
+      [`${ID_PREFIX}_${myPeerId}`]: { card: myCard, name: myName },
     }));
     setMyCard(null);
   };
@@ -174,11 +186,8 @@ const App = () => {
           />
 
           <AddPeerZone
-            friendId={friendId}
-            friendName={friendName}
-            handleFriendId={handleFriendId}
+            friendsList={friendsList}
             peer={peer}
-            connection={connection}
             connectToPeer={connectToPeer}
           />
         </Box>
@@ -186,10 +195,10 @@ const App = () => {
 
       <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
         <MainZone
-          connection={connection}
+          connectionOk={isConnectionOpened(friendsList)}
           messages={messages}
           chosenCards={chosenCards}
-          peerId={myPeerId}
+          peerId={`${ID_PREFIX}_${myPeerId}`}
           resetCards={resetCards}
         />
       </Box>
@@ -206,14 +215,14 @@ const App = () => {
         <SendMessageZone
           message={newMessage}
           handleMessage={handleNewMessage}
-          connection={connection}
+          connectionOk={isConnectionOpened(friendsList)}
           sendMessageToPeers={sendMessageToPeers}
         />
 
         <ChooseCardZone
           card={myCard}
           setCard={setMyCard}
-          connection={connection}
+          connectionOk={isConnectionOpened(friendsList)}
           sendCardToPeers={sendCardToPeers}
         />
       </Box>
@@ -222,3 +231,10 @@ const App = () => {
 };
 
 export default App;
+
+const isConnectionOpened = (friendsList) => {
+  if (!friendsList || !Object.keys(friendsList).length) {
+    return false;
+  }
+  return true;
+};

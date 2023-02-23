@@ -1,16 +1,23 @@
-import { Button, CardActions, CardContent, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardActions,
+  CardContent,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
 
+import { ID_PREFIX } from "./constants";
+import { getRandomId } from "./getIdentity";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 
-export const AddPeerZone = ({
-  friendId,
-  friendName,
-  handleFriendId,
-  peer,
-  connection,
-  connectToPeer,
-}) => {
+export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
+  const [friendId, setFriendId] = useState(getRandomId());
+
+  const handleFriendId = (event) => {
+    setFriendId(event.target.value);
+  };
   return (
     <Card>
       <CardContent>
@@ -23,13 +30,19 @@ export const AddPeerZone = ({
           value={friendId}
           onChange={handleFriendId}
         />
-        <TextField label="Friend nickname" value={friendName} disabled />
+        {Object.keys(friendsList).map((friendId, index) => {
+          return (
+            <Box key={index}>
+              {friendsList[friendId].name || `[${friendId}]`}
+            </Box>
+          );
+        })}
       </CardContent>
       <CardActions>
         <Button
           size="small"
-          disabled={!peer || !!connection}
-          onClick={connectToPeer}
+          disabled={!peer || !!Object.keys(friendsList).length}
+          onClick={connectToPeer(`${ID_PREFIX}_${friendId}`)}
         >
           Connect to peer
         </Button>

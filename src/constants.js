@@ -16,7 +16,7 @@ export const NICKNAMES = [
   "Elon",
   "Maxime",
   "Donald",
-  "Emmenuel",
+  "Emmanuel",
   "Rocco",
   "Brigitte",
   "Wejdene",

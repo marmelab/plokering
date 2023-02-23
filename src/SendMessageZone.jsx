@@ -6,7 +6,7 @@ import { CardTitle } from "./uiComponents/CardTitle";
 export const SendMessageZone = ({
   message,
   handleMessage,
-  connection,
+  connectionOk,
   sendMessageToPeers,
 }) => {
   return (
@@ -29,7 +29,7 @@ export const SendMessageZone = ({
       <CardActions>
         <Button
           size="small"
-          disabled={!connection}
+          disabled={!connectionOk}
           onClick={sendMessageToPeers}
         >
           Send message

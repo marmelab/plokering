@@ -6,13 +6,13 @@ import { MessagesZone } from "./MessagesZone";
 import { PlanningCard } from "./PlanningCard";
 
 export const MainZone = ({
-  connection,
+  connectionOk,
   chosenCards,
   messages,
   peerId,
   resetCards,
 }) => {
-  if (!connection) {
+  if (!connectionOk) {
     return (
       <Container messages={messages}>
         <AwaitConnection />

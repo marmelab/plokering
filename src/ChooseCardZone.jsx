@@ -7,7 +7,7 @@ import { PlanningCards } from "./PlanningCards";
 export const ChooseCardZone = ({
   card,
   setCard,
-  connection,
+  connectionOk,
   sendCardToPeers,
 }) => {
   return (
@@ -19,7 +19,7 @@ export const ChooseCardZone = ({
       <CardActions>
         <Button
           size="small"
-          disabled={!connection || card === null}
+          disabled={!connectionOk || card === null}
           onClick={sendCardToPeers}
         >
           Chose this card

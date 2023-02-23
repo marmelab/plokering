@@ -63,11 +63,9 @@ export const MessagesZone = ({ messages }) => {
 const Message = ({ author, message, isAdmin, isMe }) => {
   return (
     <Box
-      component="p"
       sx={{
         textAlign: isAdmin ? "center" : isMe ? "right" : "left",
         overflowAnchor: "none",
-        whiteSpace: "pre-line",
       }}
     >
       {!isAdmin && (
@@ -75,6 +73,7 @@ const Message = ({ author, message, isAdmin, isMe }) => {
           sx={{
             display: "inline-flex",
             fontWeight: "bold",
+            overflowAnchor: "none",
             backgroundColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
             color: isMe ? MY_COLOR : FRIEND_COLOR,
             borderRadius: "4px",
@@ -85,7 +84,15 @@ const Message = ({ author, message, isAdmin, isMe }) => {
           {author}
         </Box>
       )}
-      <Box>{message}</Box>
+      <Box
+        component="p"
+        sx={{
+          overflowAnchor: "none",
+          whiteSpace: "pre-line",
+        }}
+      >
+        {message}
+      </Box>
     </Box>
   );
 };

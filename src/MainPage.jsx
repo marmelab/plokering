@@ -4,8 +4,7 @@ import { Peer } from "peerjs";
 
 import { ADMIN_CODE, ID_PREFIX } from "./constants";
 import CONFIG from "./config";
-import { getRandomNickname } from "./getIdentity";
-import { isConnectionOpened } from "./isConnectionOpened";
+import { getRandomNickname, isRegistered, isConnectionOpened } from "./tools";
 import { AddPeerZone } from "./AddPeerZone";
 import { ChooseCardZone } from "./ChooseCardZone";
 import { ConnectionZone } from "./ConnectionZone";
@@ -16,8 +15,8 @@ import { SendMessageZone } from "./SendMessageZone";
 export const MainPage = ({
   friendsList,
   setFriendsList,
-  peer,
-  setPeer,
+  peerManager,
+  setPeerManager,
   myPeerId,
   setMyPeerId,
 }) => {
@@ -135,9 +134,12 @@ export const MainPage = ({
   };
 
   const register = () => {
-    const peer = new Peer(`${ID_PREFIX}_${myPeerId}`, CONFIG.peerJsServer);
-    setPeer(peer);
-    peer.on("open", (id) => {
+    const peerManager = new Peer(
+      `${ID_PREFIX}_${myPeerId}`,
+      CONFIG.peerJsServer
+    );
+    setPeerManager(peerManager);
+    peerManager.on("open", (id) => {
       console.log("Registered");
       addMessage({
         author: { name: ADMIN_CODE, id: ADMIN_CODE },
@@ -145,7 +147,7 @@ export const MainPage = ({
       });
     });
 
-    peer.on("connection", (conn) => {
+    peerManager.on("connection", (conn) => {
       console.log("Connection received");
 
       conn.on("data", (data) => {
@@ -163,9 +165,9 @@ export const MainPage = ({
       });
     });
 
-    peer.on("error", (error) => {
-      if (!peer?.open) {
-        setPeer(null);
+    peerManager.on("error", (error) => {
+      if (!peerManager?.open) {
+        setPeerManager(null);
         setFriendsList({});
       }
       console.error(error);
@@ -177,8 +179,8 @@ export const MainPage = ({
   };
 
   const connectToPeer = (friendId) => () => {
-    if (peer) {
-      let conn = peer.connect(friendId);
+    if (peerManager) {
+      let conn = peerManager.connect(friendId);
 
       conn.on("data", (data) => {
         receiveData(conn, data);
@@ -197,10 +199,10 @@ export const MainPage = ({
   };
 
   const unRegister = () => {
-    if (peer) {
-      peer.disconnect();
-      peer.destroy();
-      setPeer(null);
+    if (peerManager) {
+      peerManager.disconnect();
+      peerManager.destroy();
+      setPeerManager(null);
       setFriendsList({});
       setChosenCards({});
       console.log("Unregistered");
@@ -244,14 +246,14 @@ export const MainPage = ({
             peerName={myName}
             handlePeerId={handlePeerId}
             handlePeerName={handlePeerName}
-            peer={peer}
+            peerManager={peerManager}
             register={register}
             unRegister={unRegister}
           />
 
           <AddPeerZone
             friendsList={friendsList}
-            peer={peer}
+            peerManager={peerManager}
             connectToPeer={connectToPeer}
           />
         </Box>
@@ -259,6 +261,7 @@ export const MainPage = ({
 
       <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
         <MainZone
+          registeringOk={isRegistered(peerManager)}
           connectionOk={isConnectionOpened(friendsList)}
           friendsList={friendsList}
           messages={messages}

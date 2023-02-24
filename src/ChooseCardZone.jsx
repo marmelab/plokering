@@ -2,8 +2,7 @@ import { Button, CardActions, CardContent } from "@mui/material";
 import { useState } from "react";
 
 import { ID_PREFIX } from "./constants";
-import { isMyCardChosen } from "./isMyCardChosen";
-import { isConnectionOpened } from "./isConnectionOpened";
+import { isMyCardChosen, isConnectionOpened } from "./tools";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 import { PlanningCards } from "./PlanningCards";

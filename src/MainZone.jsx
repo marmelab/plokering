@@ -1,20 +1,26 @@
 import { Box, Button } from "@mui/material";
 
-import { isMyCardChosen } from "./isMyCardChosen";
+import { isMyCardChosen } from "./tools";
 import { AwaitCard } from "./AwaitCard";
-import { AwaitConnection } from "./AwaitConnection";
+import { AwaitFriend } from "./AwaitFriend";
+import { AwaitRegistering } from "./AwaitRegistering";
 import { AwaitVoters } from "./AwaitVoters";
 import { PlanningCard } from "./PlanningCard";
 
 export const MainZone = ({
+  registeringOk,
   connectionOk,
   friendsList,
   chosenCards,
   peerId,
   resetCards,
 }) => {
+  if (!registeringOk) {
+    return <AwaitRegistering />;
+  }
+
   if (!connectionOk) {
-    return <AwaitConnection />;
+    return <AwaitFriend />;
   }
 
   if (!isMyCardChosen(peerId, chosenCards)) {

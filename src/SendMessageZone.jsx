@@ -3,7 +3,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
 
 import { SELF_CODE } from "./constants";
-import { isConnectionOpened } from "./isConnectionOpened";
+import { isConnectionOpened } from "./tools";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 import { MessagesZone } from "./MessagesZone";

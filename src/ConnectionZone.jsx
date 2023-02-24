@@ -1,5 +1,6 @@
 import { Button, CardActions, CardContent, TextField } from "@mui/material";
 
+import { isRegistered } from "./tools";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 
@@ -8,10 +9,12 @@ export const ConnectionZone = ({
   peerName,
   handlePeerId,
   handlePeerName,
-  peer,
+  peerManager,
   register,
   unRegister,
 }) => {
+  const isRegisteredOk = isRegistered(peerManager);
+
   return (
     <Card>
       <CardContent>
@@ -21,7 +24,7 @@ export const ConnectionZone = ({
           type="number"
           step="1"
           label="My Id"
-          disabled={!!peer}
+          disabled={isRegisteredOk}
           value={peerId}
           onChange={handlePeerId}
         />
@@ -32,10 +35,10 @@ export const ConnectionZone = ({
         />
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
-        <Button size="small" disabled={!!peer} onClick={register}>
+        <Button size="small" disabled={isRegisteredOk} onClick={register}>
           Register to server
         </Button>
-        <Button size="small" disabled={!peer} onClick={unRegister}>
+        <Button size="small" disabled={!isRegisteredOk} onClick={unRegister}>
           Unregister
         </Button>
       </CardActions>

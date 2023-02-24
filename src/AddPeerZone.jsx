@@ -8,12 +8,12 @@ import {
 import { useState } from "react";
 
 import { ID_PREFIX } from "./constants";
-import { getRandomId } from "./getIdentity";
+import { getRandomId, isRegistered } from "./tools";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 import { NameChip } from "./uiComponents/NameChip";
 
-export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
+export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
   const [friendId, setFriendId] = useState(getRandomId());
 
   const handleFriendId = (event) => {
@@ -56,7 +56,7 @@ export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
       <CardActions>
         <Button
           size="small"
-          disabled={!peer || !friendId}
+          disabled={!isRegistered(peerManager) || !friendId}
           onClick={connectToPeer(`${ID_PREFIX}_${friendId}`)}
         >
           Connect to peer

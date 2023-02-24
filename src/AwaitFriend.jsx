@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export const AwaitConnection = () => {
+export const AwaitFriend = () => {
   return (
     <Box
       sx={{

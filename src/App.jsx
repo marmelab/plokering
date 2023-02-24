@@ -1,19 +1,19 @@
 import { useState } from "react";
 
-import { getRandomId } from "./getIdentity";
+import { getRandomId } from "./tools";
 import { MainPage } from "./MainPage";
 
 const App = () => {
   const [myPeerId, setMyPeerId] = useState(getRandomId());
-  const [peer, setPeer] = useState(null);
+  const [peerManager, setPeerManager] = useState(null);
   const [friendsList, setFriendsList] = useState({});
 
   return (
     <MainPage
       friendsList={friendsList}
       setFriendsList={setFriendsList}
-      peer={peer}
-      setPeer={setPeer}
+      peerManager={peerManager}
+      setPeerManager={setPeerManager}
       myPeerId={myPeerId}
       setMyPeerId={setMyPeerId}
     />

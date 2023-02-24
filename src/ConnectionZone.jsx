@@ -21,6 +21,7 @@ export const ConnectionZone = ({
           type="number"
           step="1"
           label="My Id"
+          disabled={!!peer}
           value={peerId}
           onChange={handlePeerId}
         />

@@ -244,6 +244,7 @@ export const MainPage = ({
           myName={myName}
           friendsList={friendsList}
           addMessage={addMessage}
+          messages={messages}
         />
 
         <ChooseCardZone friendsList={friendsList} chooseCard={chooseCard} />

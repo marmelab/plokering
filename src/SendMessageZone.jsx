@@ -1,12 +1,19 @@
-import { Button, CardActions, CardContent, TextField } from "@mui/material";
+import { Box, CardContent, IconButton, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
 
 import { SELF_CODE } from "./constants";
 import { isConnectionOpened } from "./isConnectionOpened";
 import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
+import { MessagesZone } from "./MessagesZone";
 
-export const SendMessageZone = ({ myName, friendsList, addMessage }) => {
+export const SendMessageZone = ({
+  myName,
+  friendsList,
+  addMessage,
+  messages,
+}) => {
   const [message, setMessage] = useState("");
 
   const handleMessage = (event) => {
@@ -28,29 +35,32 @@ export const SendMessageZone = ({ myName, friendsList, addMessage }) => {
   return (
     <Card>
       <CardContent>
-        <CardTitle>Message</CardTitle>
-        <TextField
-          label="My message"
-          value={message}
-          onChange={handleMessage}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              return sendMessageToPeers();
-            }
-          }}
-          fullWidth
-        />
+        <CardTitle>Chat here</CardTitle>
+        <MessagesZone messages={messages} />
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <TextField
+            label="My message"
+            value={message}
+            disabled={!isConnectionOpened(friendsList)}
+            onChange={handleMessage}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                return sendMessageToPeers();
+              }
+            }}
+            fullWidth
+          />
+          <IconButton
+            size="small"
+            disabled={!isConnectionOpened(friendsList) || !message}
+            onClick={sendMessageToPeers}
+            title="Send message"
+          >
+            <SendIcon />
+          </IconButton>
+        </Box>
       </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          disabled={!isConnectionOpened(friendsList) || !message}
-          onClick={sendMessageToPeers}
-        >
-          Send message
-        </Button>
-      </CardActions>
     </Card>
   );
 };

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 import { NameChip } from "./uiComponents/NameChip";
 import { ADMIN_CODE, SELF_CODE } from "./constants";
@@ -13,21 +13,11 @@ export const MessagesZone = ({ messages }) => {
         alignContent: "center",
       }}
     >
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          paddingTop: "50px",
-        }}
-        color="text.primary"
-        gutterBottom
-      >
-        Messages:
-      </Typography>
       <Box
         sx={{
-          maxHeight: "255px",
+          height: "255px",
           maxWidth: "500px",
-          overflowY: "auto",
+          overflowY: "scroll",
           padding: "0 10px",
         }}
       >

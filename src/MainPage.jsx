@@ -202,6 +202,7 @@ export const MainPage = ({
       peer.destroy();
       setPeer(null);
       setFriendsList({});
+      setChosenCards({});
       console.log("Unregistered");
       addMessage({
         author: { name: ADMIN_CODE, id: ADMIN_CODE },
@@ -284,7 +285,12 @@ export const MainPage = ({
           messages={messages}
         />
 
-        <ChooseCardZone friendsList={friendsList} chooseCard={chooseCard} />
+        <ChooseCardZone
+          friendsList={friendsList}
+          chooseCard={chooseCard}
+          myPeerId={myPeerId}
+          chosenCards={chosenCards}
+        />
       </Box>
     </Box>
   );

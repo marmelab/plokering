@@ -1,5 +1,6 @@
 import { Box, Button } from "@mui/material";
 
+import { isMyCardChosen } from "./isMyCardChosen";
 import { AwaitCard } from "./AwaitCard";
 import { AwaitConnection } from "./AwaitConnection";
 import { AwaitVoters } from "./AwaitVoters";
@@ -84,11 +85,4 @@ const areAllCardsChosen = (friendsList, chosenCards) => {
     return true;
   }
   return false;
-};
-
-const isMyCardChosen = (myPeerId, chosenCards) => {
-  if (chosenCards[myPeerId] === null || chosenCards[myPeerId] === undefined) {
-    return false;
-  }
-  return true;
 };

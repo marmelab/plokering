@@ -46,6 +46,9 @@ export const MainPage = ({
   };
 
   const chooseCard = (cardValue) => {
+    Object.keys(friendsList).map((friendId) =>
+      friendsList[friendId].connection.send({ name: myName, card: cardValue })
+    );
     setChosenCards((previous) => ({
       ...previous,
       [`${ID_PREFIX}_${myPeerId}`]: { card: cardValue, name: myName },
@@ -53,6 +56,9 @@ export const MainPage = ({
   };
 
   const resetCards = () => {
+    Object.keys(friendsList).map((friendId) =>
+      friendsList[friendId].connection.send({ name: myName, resetCards: true })
+    );
     setChosenCards({});
   };
 
@@ -65,10 +71,12 @@ export const MainPage = ({
   };
 
   const updateFriendName = (name, friendId) => {
+    //if (friendsList[friendId].name !== name) {
     setFriendsList((previous) => ({
       ...previous,
       [friendId]: { ...previous[friendId], name },
     }));
+    //}
   };
 
   const connectionMessage = (conn) => {
@@ -77,7 +85,10 @@ export const MainPage = ({
     conn.send({ name: myName, message: `Hello, I'm new here` });
   };
 
-  const receiveData = (connection, { name, message, card, newFriends }) => {
+  const receiveData = (
+    connection,
+    { name, message, card, resetCards, newFriends }
+  ) => {
     updateFriendName(name, connection.peer);
     if (message) {
       addMessage({ author: name, text: message });
@@ -87,6 +98,9 @@ export const MainPage = ({
         ...previous,
         [connection.peer]: { card, name },
       }));
+    }
+    if (resetCards) {
+      setChosenCards({});
     }
     if (newFriends && newFriends.length) {
       newFriends.map((newFriend) => {
@@ -232,11 +246,7 @@ export const MainPage = ({
           addMessage={addMessage}
         />
 
-        <ChooseCardZone
-          myName={myName}
-          friendsList={friendsList}
-          chooseCard={chooseCard}
-        />
+        <ChooseCardZone friendsList={friendsList} chooseCard={chooseCard} />
       </Box>
     </Box>
   );

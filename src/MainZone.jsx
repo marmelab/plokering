@@ -1,5 +1,6 @@
 import { Box, Button } from "@mui/material";
 
+import { AwaitCard } from "./AwaitCard";
 import { AwaitConnection } from "./AwaitConnection";
 import { AwaitVoters } from "./AwaitVoters";
 import { MessagesZone } from "./MessagesZone";
@@ -21,10 +22,21 @@ export const MainZone = ({
     );
   }
 
+  if (!isMyCardChosen(peerId, chosenCards)) {
+    return (
+      <Container messages={messages}>
+        <AwaitCard />
+      </Container>
+    );
+  }
+
   if (!areAllCardsChosen(friendsList, chosenCards)) {
     return (
       <Container messages={messages}>
-        <AwaitVoters />
+        <AwaitVoters
+          myCardValue={chosenCards[peerId].card}
+          myName={chosenCards[peerId].name}
+        />
       </Container>
     );
   }
@@ -86,6 +98,13 @@ const areAllCardsChosen = (friendsList, chosenCards) => {
     return true;
   }
   return false;
+};
+
+const isMyCardChosen = (myPeerId, chosenCards) => {
+  if (chosenCards[myPeerId] === null || chosenCards[myPeerId] === undefined) {
+    return false;
+  }
+  return true;
 };
 
 const Container = ({ children, messages }) => {

@@ -1,6 +1,8 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-export const AwaitVoters = () => {
+import { PlanningCard } from "./PlanningCard";
+
+export const AwaitVoters = ({ myCardValue, myName }) => {
   return (
     <Box
       sx={{
@@ -21,10 +23,23 @@ export const AwaitVoters = () => {
         color="text.primary"
         gutterBottom
       >
-        Waiting for others players
+        Waiting for others players card
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <CircularProgress />
+      <Box
+        sx={{ display: "flex", justifyContent: "center", position: "relative" }}
+      >
+        <img src="/time.svg" width="30%" />
+        <CircularProgress
+          sx={{ position: "absolute", top: "49%", left: "48.5%" }}
+        />
+        <PlanningCard
+          sx={{ position: "absolute", top: "calc(50% - 30px)", right: "37%" }}
+          value={myCardValue}
+          isMe
+          playerName={myName}
+          index={2}
+          totalNumber={2}
+        />
       </Box>
     </Box>
   );

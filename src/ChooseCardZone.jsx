@@ -6,13 +6,10 @@ import { Card } from "./uiComponents/Card";
 import { CardTitle } from "./uiComponents/CardTitle";
 import { PlanningCards } from "./PlanningCards";
 
-export const ChooseCardZone = ({ myName, friendsList, chooseCard }) => {
+export const ChooseCardZone = ({ friendsList, chooseCard }) => {
   const [cardValue, setCardValue] = useState(null);
 
   const sendCardToPeers = () => {
-    Object.keys(friendsList).map((friendId) =>
-      friendsList[friendId].connection.send({ name: myName, card: cardValue })
-    );
     chooseCard(cardValue);
     setCardValue(null);
   };

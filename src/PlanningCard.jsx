@@ -16,12 +16,14 @@ export const PlanningCard = ({
   selected,
   selectCard,
   bigCard,
+  sx,
 }) => {
   const middleNumber = totalNumber / 2;
 
   return (
     <Card
       sx={{
+        ...sx,
         display: "flex",
         width: bigCard ? "120px" : "40px",
         height: bigCard ? "195px" : "65px",

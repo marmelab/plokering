@@ -248,7 +248,7 @@ export const MainPage = ({
       >
         <SendMessageZone
           myName={myName}
-          idId={myPeerId}
+          myId={`${ID_PREFIX}_${myPeerId}`}
           friendsList={friendsList}
           addMessage={addMessage}
           messages={messages}

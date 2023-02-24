@@ -28,7 +28,7 @@ export const MessagesZone = ({ messages }) => {
               author={message.author}
               message={message.text}
               isAdmin={message.author.id === ADMIN_CODE}
-              isMe={message.author === SELF_CODE}
+              isMe={message.author.name === SELF_CODE}
             />
           );
         })}

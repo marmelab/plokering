@@ -41,6 +41,18 @@ export const MainPage = ({
     });
   };
 
+  const removeFriend = (connection) => {
+    connection.close();
+    setFriendsList((previous) => {
+      const updatedFriendsList = {
+        ...previous,
+      };
+
+      delete updatedFriendsList[connection.peer];
+      return updatedFriendsList;
+    });
+  };
+
   const addMessage = (message) => {
     setMessages((previousMessages) => [...previousMessages, message]);
   };
@@ -86,6 +98,14 @@ export const MainPage = ({
       text: `Connection with [${conn.peer}]`,
     });
     conn.send({ name: myName, message: `Hello, I'm new here` });
+  };
+
+  const deconnectionMessage = (conn) => {
+    console.log(`Deconnection from [${conn.peer}]`);
+    addMessage({
+      author: { name: ADMIN_CODE, id: ADMIN_CODE },
+      text: `Connection closed for: [${conn.peer}]`,
+    });
   };
 
   const receiveData = (
@@ -136,6 +156,11 @@ export const MainPage = ({
         addFriend(conn);
         connectionMessage(conn);
       });
+
+      conn.on("close", () => {
+        deconnectionMessage(conn);
+        removeFriend(conn);
+      });
     });
 
     peer.on("error", (error) => {
@@ -162,6 +187,11 @@ export const MainPage = ({
       conn.on("open", () => {
         addFriend(conn);
         connectionMessage(conn);
+      });
+
+      conn.on("close", () => {
+        deconnectionMessage(conn);
+        removeFriend(conn);
       });
     }
   };

@@ -46,6 +46,7 @@ export const AddPeerZone = ({ friendsList, peer, connectToPeer }) => {
                 <NameChip
                   key={index}
                   name={friendsList[friendId].name || `[${friendId}]`}
+                  id={friendId}
                 />
               );
             })}

@@ -81,7 +81,10 @@ export const MainPage = ({
 
   const connectionMessage = (conn) => {
     console.log(`Connection with [${conn.peer}]`);
-    addMessage({ author: ADMIN_CODE, text: `Connection with [${conn.peer}]` });
+    addMessage({
+      author: { name: ADMIN_CODE, id: ADMIN_CODE },
+      text: `Connection with [${conn.peer}]`,
+    });
     conn.send({ name: myName, message: `Hello, I'm new here` });
   };
 
@@ -91,7 +94,7 @@ export const MainPage = ({
   ) => {
     updateFriendName(name, connection.peer);
     if (message) {
-      addMessage({ author: name, text: message });
+      addMessage({ author: { name, id: connection.peer }, text: message });
     }
     if (card !== null && card !== undefined) {
       setChosenCards((previous) => ({
@@ -117,7 +120,7 @@ export const MainPage = ({
     peer.on("open", (id) => {
       console.log("Registered");
       addMessage({
-        author: ADMIN_CODE,
+        author: { name: ADMIN_CODE, id: ADMIN_CODE },
         text: `Registered, my peer ID is: [${id}]`,
       });
     });
@@ -141,7 +144,10 @@ export const MainPage = ({
         setFriendsList({});
       }
       console.error(error);
-      addMessage({ author: ADMIN_CODE, text: `Error : ${error.message}` });
+      addMessage({
+        author: { name: ADMIN_CODE, id: ADMIN_CODE },
+        text: `Error : ${error.message}`,
+      });
     });
   };
 
@@ -168,7 +174,7 @@ export const MainPage = ({
       setFriendsList({});
       console.log("Unregistered");
       addMessage({
-        author: ADMIN_CODE,
+        author: { name: ADMIN_CODE, id: ADMIN_CODE },
         text: `Unregistered, all connections closed`,
       });
     }
@@ -242,6 +248,7 @@ export const MainPage = ({
       >
         <SendMessageZone
           myName={myName}
+          idId={myPeerId}
           friendsList={friendsList}
           addMessage={addMessage}
           messages={messages}

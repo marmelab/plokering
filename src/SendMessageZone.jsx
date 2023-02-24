@@ -10,6 +10,7 @@ import { MessagesZone } from "./MessagesZone";
 
 export const SendMessageZone = ({
   myName,
+  myId,
   friendsList,
   addMessage,
   messages,
@@ -22,7 +23,7 @@ export const SendMessageZone = ({
 
   const sendMessageToPeers = () => {
     console.log("Send a message to peer");
-    addMessage({ author: SELF_CODE, text: message });
+    addMessage({ author: { name: SELF_CODE, id: myId }, text: message });
     Object.keys(friendsList).map((friendId) =>
       friendsList[friendId].connection.send({
         name: myName,
@@ -35,7 +36,7 @@ export const SendMessageZone = ({
   return (
     <Card>
       <CardContent>
-        <CardTitle>Chat here</CardTitle>
+        <CardTitle>Chat</CardTitle>
         <MessagesZone messages={messages} />
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <TextField

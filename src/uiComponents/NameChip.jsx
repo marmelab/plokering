@@ -7,7 +7,7 @@ import {
   FRIEND_BACK_COLOR,
 } from "../constants";
 
-export const NameChip = ({ isMe, name }) => (
+export const NameChip = ({ isMe, name, id }) => (
   <Box
     sx={{
       display: "inline-flex",
@@ -22,6 +22,7 @@ export const NameChip = ({ isMe, name }) => (
       borderColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
       marginBottom: "2px",
     }}
+    title={id}
   >
     {name}
   </Box>

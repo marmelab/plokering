@@ -27,7 +27,7 @@ export const MessagesZone = ({ messages }) => {
               key={index}
               author={message.author}
               message={message.text}
-              isAdmin={message.author === ADMIN_CODE}
+              isAdmin={message.author.id === ADMIN_CODE}
               isMe={message.author === SELF_CODE}
             />
           );
@@ -52,7 +52,7 @@ const Message = ({ author, message, isAdmin, isMe }) => {
         overflowAnchor: "none",
       }}
     >
-      {!isAdmin && <NameChip isMe={isMe} name={author} />}
+      {!isAdmin && <NameChip isMe={isMe} name={author.name} id={author.id} />}
       <Box
         component="p"
         sx={{

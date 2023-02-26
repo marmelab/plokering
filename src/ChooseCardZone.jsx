@@ -22,7 +22,7 @@ export const ChooseCardZone = ({
   return (
     <MobileCard
       title="Planing poker"
-      subtitle={`Choosen : ${cardValue}`}
+      subtitle={`Choosen : ${cardValue || "none"}`}
       content={<PlanningCards card={cardValue} setCard={setCardValue} />}
       actions={
         <Button

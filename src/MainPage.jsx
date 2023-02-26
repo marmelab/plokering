@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { Peer } from "peerjs";
 
 import { ADMIN_CODE, ID_PREFIX } from "./constants";
@@ -20,6 +20,7 @@ export const MainPage = ({
   myPeerId,
   setMyPeerId,
 }) => {
+  const multiColumnDisplay = useMediaQuery("(min-width:600px)");
   const [myName, setMyName] = useState(getRandomNickname());
   const [chosenCards, setChosenCards] = useState({});
   const [messages, setMessages] = useState([]);
@@ -229,17 +230,22 @@ export const MainPage = ({
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: multiColumnDisplay ? "row" : "column",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignContent: "center",
-          width: "20%",
+          width: multiColumnDisplay ? "20%" : "100%",
         }}
       >
-        <LogoZone />
+        {multiColumnDisplay && <LogoZone />}
         <Box>
           <ConnectionZone
             peerId={myPeerId}
@@ -259,7 +265,13 @@ export const MainPage = ({
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "column", width: "58%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: multiColumnDisplay ? "58%" : "100%",
+        }}
+      >
         <MainZone
           registeringOk={isRegistered(peerManager)}
           connectionOk={isConnectionOpened(friendsList)}
@@ -277,7 +289,7 @@ export const MainPage = ({
           flexDirection: "column",
           justifyContent: "center",
           alignContent: "center",
-          width: "20%",
+          width: multiColumnDisplay ? "20%" : "100%",
         }}
       >
         <SendMessageZone

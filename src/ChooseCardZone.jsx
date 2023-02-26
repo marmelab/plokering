@@ -1,10 +1,9 @@
-import { Button, CardActions, CardContent } from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 
 import { ID_PREFIX } from "./constants";
 import { isMyCardChosen, isConnectionOpened } from "./tools";
-import { Card } from "./uiComponents/Card";
-import { CardTitle } from "./uiComponents/CardTitle";
+import { MobileCard } from "./uiComponents/Card";
 import { PlanningCards } from "./PlanningCards";
 
 export const ChooseCardZone = ({
@@ -21,12 +20,11 @@ export const ChooseCardZone = ({
   };
 
   return (
-    <Card>
-      <CardContent>
-        <CardTitle>Planing poker</CardTitle>
-        <PlanningCards card={cardValue} setCard={setCardValue} />
-      </CardContent>
-      <CardActions>
+    <MobileCard
+      title="Planing poker"
+      subtitle={`Choosen : ${cardValue}`}
+      content={<PlanningCards card={cardValue} setCard={setCardValue} />}
+      actions={
         <Button
           size="small"
           disabled={
@@ -38,7 +36,7 @@ export const ChooseCardZone = ({
         >
           Chose this card
         </Button>
-      </CardActions>
-    </Card>
+      }
+    />
   );
 };

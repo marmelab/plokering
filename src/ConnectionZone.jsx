@@ -1,8 +1,7 @@
-import { Button, CardActions, CardContent, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 import { isRegistered } from "./tools";
-import { Card } from "./uiComponents/Card";
-import { CardTitle } from "./uiComponents/CardTitle";
+import { MobileCard } from "./uiComponents/Card";
 
 export const ConnectionZone = ({
   peerId,
@@ -16,32 +15,38 @@ export const ConnectionZone = ({
   const isRegisteredOk = isRegistered(peerManager);
 
   return (
-    <Card>
-      <CardContent>
-        <CardTitle>Connection</CardTitle>
-        <TextField
-          sx={{ marginBottom: "15px" }}
-          type="number"
-          step="1"
-          label="My Id"
-          disabled={isRegisteredOk}
-          value={peerId}
-          onChange={handlePeerId}
-        />
-        <TextField
-          label="My nickname"
-          value={peerName}
-          onChange={handlePeerName}
-        />
-      </CardContent>
-      <CardActions sx={{ justifyContent: "space-between" }}>
-        <Button size="small" disabled={isRegisteredOk} onClick={register}>
-          Register to server
-        </Button>
-        <Button size="small" disabled={!isRegisteredOk} onClick={unRegister}>
-          Unregister
-        </Button>
-      </CardActions>
-    </Card>
+    <MobileCard
+      title="Connection"
+      subtitle={`My id: ${peerId}`}
+      content={
+        <>
+          <TextField
+            sx={{ marginBottom: "15px" }}
+            type="number"
+            step="1"
+            label="My Id"
+            disabled={isRegisteredOk}
+            value={peerId}
+            onChange={handlePeerId}
+          />
+          <TextField
+            label="My nickname"
+            value={peerName}
+            onChange={handlePeerName}
+          />
+        </>
+      }
+      actions={
+        //sx={{ justifyContent: "space-between" }}
+        <>
+          <Button size="small" disabled={isRegisteredOk} onClick={register}>
+            Register to server
+          </Button>
+          <Button size="small" disabled={!isRegisteredOk} onClick={unRegister}>
+            Unregister
+          </Button>
+        </>
+      }
+    ></MobileCard>
   );
 };

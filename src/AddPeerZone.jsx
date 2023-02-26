@@ -1,16 +1,9 @@
-import {
-  Box,
-  Button,
-  CardActions,
-  CardContent,
-  TextField,
-} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
 import { ID_PREFIX } from "./constants";
 import { getRandomId, isRegistered } from "./tools";
-import { Card } from "./uiComponents/Card";
-import { CardTitle } from "./uiComponents/CardTitle";
+import { MobileCard } from "./uiComponents/Card";
 import { NameChip } from "./uiComponents/NameChip";
 
 export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
@@ -19,10 +12,14 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
   const handleFriendId = (event) => {
     setFriendId(event.target.value);
   };
+
+  const friendsNumber = Object.keys(friendsList).length;
+
   return (
-    <Card>
-      <CardContent>
-        <CardTitle>Add peer</CardTitle>
+    <MobileCard
+      title="Friends"
+      subtitle={`Number: ${friendsNumber}`}
+      content={
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <TextField
             sx={{ marginBottom: "15px" }}
@@ -52,8 +49,8 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
             })}
           </Box>
         </Box>
-      </CardContent>
-      <CardActions>
+      }
+      actions={
         <Button
           size="small"
           disabled={!isRegistered(peerManager) || !friendId}
@@ -61,7 +58,7 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
         >
           Connect to peer
         </Button>
-      </CardActions>
-    </Card>
+      }
+    />
   );
 };

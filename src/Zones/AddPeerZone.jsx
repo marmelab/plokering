@@ -1,10 +1,10 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
-import { ID_PREFIX } from "./constants";
-import { getRandomId, isRegistered } from "./tools";
-import { MobileCard } from "./uiComponents/Card";
-import { NameChip } from "./uiComponents/NameChip";
+import { ID_PREFIX } from "../constants";
+import { getRandomId, isRegistered } from "../tools";
+import { MobileCard } from "../uiComponents/Card";
+import { NameChip } from "../uiComponents/NameChip";
 
 export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
   const [friendId, setFriendId] = useState(getRandomId());

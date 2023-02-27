@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export const AwaitCard = () => {
+export const Container = ({ children, text }) => {
   return (
     <Box
       sx={{
@@ -8,6 +8,7 @@ export const AwaitCard = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignContent: "center",
+        marginBottom: "10px",
       }}
     >
       <Typography
@@ -21,11 +22,9 @@ export const AwaitCard = () => {
         color="text.primary"
         gutterBottom
       >
-        Please choose a card, the others are waiting for you
+        {text}
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <img src="/cards.svg" width="30%" />
-      </Box>
+      {children}
     </Box>
   );
 };

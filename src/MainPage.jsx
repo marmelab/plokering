@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { Peer } from "peerjs";
 
-import { ADMIN_CODE, ID_PREFIX } from "./constants";
+import { ADMIN_CODE, ID_PREFIX, MEDIAQUERY_MOBILE_GAP } from "./constants";
 import CONFIG from "./config";
 import { getRandomNickname, isRegistered, isConnectionOpened } from "./tools";
-import { AddPeerZone } from "./AddPeerZone";
-import { ChooseCardZone } from "./ChooseCardZone";
-import { ConnectionZone } from "./ConnectionZone";
-import { LogoZone } from "./LogoZone";
-import { MainZone } from "./MainZone";
-import { SendMessageZone } from "./SendMessageZone";
+import { AddPeerZone } from "./Zones/AddPeerZone";
+import { ChooseCardZone } from "./Zones/ChooseCardZone";
+import { ConnectionZone } from "./Zones/ConnectionZone";
+import { LogoZone } from "./Zones/LogoZone";
+import { MainZone } from "./Zones/MainZone";
+import { SendMessageZone } from "./Zones/SendMessageZone";
 
 export const MainPage = ({
   friendsList,
@@ -20,7 +20,7 @@ export const MainPage = ({
   myPeerId,
   setMyPeerId,
 }) => {
-  const multiColumnDisplay = useMediaQuery("(min-width:600px)");
+  const multiColumnDisplay = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const [myName, setMyName] = useState(getRandomNickname());
   const [chosenCards, setChosenCards] = useState({});
   const [messages, setMessages] = useState([]);

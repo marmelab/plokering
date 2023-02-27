@@ -1,11 +1,11 @@
-import { Box, IconButton, TextField } from "@mui/material";
+import { Box, IconButton, TextField, useMediaQuery } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
 
-import { SELF_CODE } from "./constants";
-import { isConnectionOpened } from "./tools";
-import { MobileCard } from "./uiComponents/Card";
-import { MessagesZone } from "./MessagesZone";
+import { MEDIAQUERY_MOBILE_GAP, SELF_CODE } from "../constants";
+import { isConnectionOpened } from "../tools";
+import { MobileCard } from "../uiComponents/Card";
+import { MessagesList } from "./MessagesList";
 
 export const SendMessageZone = ({
   myName,
@@ -14,6 +14,7 @@ export const SendMessageZone = ({
   addMessage,
   messages,
 }) => {
+  const visibleDefault = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const [message, setMessage] = useState("");
 
   const handleMessage = (event) => {
@@ -35,9 +36,10 @@ export const SendMessageZone = ({
   return (
     <MobileCard
       title="Chat"
+      shouldBeHidden={!visibleDefault}
       content={
         <>
-          <MessagesZone messages={messages} />
+          <MessagesList messages={messages} />
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             <TextField
               label="My message"

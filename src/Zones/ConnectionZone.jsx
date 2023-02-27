@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 
-import { isRegistered } from "./tools";
-import { MobileCard } from "./uiComponents/Card";
+import { isRegistered } from "../tools";
+import { MobileCard } from "../uiComponents/Card";
 
 export const ConnectionZone = ({
   peerId,

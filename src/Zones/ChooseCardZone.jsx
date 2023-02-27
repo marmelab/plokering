@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 
-import { ID_PREFIX } from "./constants";
-import { isMyCardChosen, isConnectionOpened } from "./tools";
-import { MobileCard } from "./uiComponents/Card";
-import { PlanningCards } from "./PlanningCards";
+import { ID_PREFIX } from "../constants";
+import { isMyCardChosen, isConnectionOpened } from "../tools";
+import { MobileCard } from "../uiComponents/Card";
+import { PlanningCards } from "./Cards/PlanningCards";
 
 export const ChooseCardZone = ({
   friendsList,
@@ -34,7 +34,7 @@ export const ChooseCardZone = ({
           }
           onClick={sendCardToPeers}
         >
-          Chose this card
+          Choose this card
         </Button>
       }
     />

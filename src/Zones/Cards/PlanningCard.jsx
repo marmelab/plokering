@@ -5,7 +5,7 @@ import {
   MY_BACK_COLOR,
   FRIEND_COLOR,
   FRIEND_BACK_COLOR,
-} from "./constants";
+} from "../../constants";
 
 export const PlanningCard = ({
   value,

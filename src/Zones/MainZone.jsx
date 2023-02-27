@@ -1,11 +1,11 @@
 import { Box, Button } from "@mui/material";
 
-import { isMyCardChosen } from "./tools";
-import { AwaitCard } from "./AwaitCard";
-import { AwaitFriend } from "./AwaitFriend";
-import { AwaitRegistering } from "./AwaitRegistering";
-import { AwaitVoters } from "./AwaitVoters";
-import { PlanningCard } from "./PlanningCard";
+import { isMyCardChosen } from "../tools";
+import { AwaitCard } from "./AwaitingDisplays/AwaitCard";
+import { AwaitFriend } from "./AwaitingDisplays/AwaitFriend";
+import { AwaitRegistering } from "./AwaitingDisplays/AwaitRegistering";
+import { AwaitVoters } from "./AwaitingDisplays/AwaitVoters";
+import { PlanningCard } from "./Cards/PlanningCard";
 
 export const MainZone = ({
   registeringOk,
@@ -43,6 +43,7 @@ export const MainZone = ({
         flexDirection: "column",
         justifyContent: "center",
         alignContent: "center",
+        marginBottom: "10px",
       }}
     >
       <Box

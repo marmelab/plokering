@@ -9,6 +9,8 @@ export const MY_BACK_COLOR = "orange";
 export const FRIEND_COLOR = "orange";
 export const FRIEND_BACK_COLOR = "brown";
 
+export const MEDIAQUERY_MOBILE_GAP = "(min-width:600px)";
+
 export const NICKNAMES = [
   "Michel",
   "Bob",

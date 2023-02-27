@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 
-import { NameChip } from "./uiComponents/NameChip";
-import { ADMIN_CODE, SELF_CODE } from "./constants";
+import { NameChip } from "../uiComponents/NameChip";
+import { ADMIN_CODE, SELF_CODE } from "../constants";
 
-export const MessagesZone = ({ messages }) => {
+export const MessagesList = ({ messages }) => {
   return (
     <Box
       sx={{

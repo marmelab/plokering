@@ -40,11 +40,8 @@ export const PlanningCard = ({
         backgroundColor: isMe ? MY_BACK_COLOR : FRIEND_BACK_COLOR,
         color: isMe ? MY_COLOR : FRIEND_COLOR,
         border: "solid 4px",
-        borderColor: selected
-          ? MY_COLOR
-          : isMe
-          ? MY_BACK_COLOR
-          : FRIEND_BACK_COLOR,
+        borderColor: selected ? MY_COLOR : "white",
+        boxShadow: "5px 5px 5px grey",
         cursor: selectCard ? "pointer" : "inherit",
         transform: `rotateZ(${
           11 * (index - middleNumber + 0.5)

@@ -32,6 +32,7 @@ export const ConnectionZone = ({
           <TextField
             label="My nickname"
             value={peerName}
+            inputProps={{ maxLength: 9 }}
             onChange={handlePeerName}
           />
         </>

@@ -8,7 +8,7 @@ export const Container = ({ children, text }) => {
         flexDirection: "column",
         justifyContent: "center",
         alignContent: "center",
-        marginBottom: "10px",
+        marginBottom: "20px",
       }}
     >
       <Typography

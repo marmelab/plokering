@@ -7,6 +7,7 @@ const App = () => {
   const [myPeerId, setMyPeerId] = useState(getRandomId());
   const [peerManager, setPeerManager] = useState(null);
   const [friendsList, setFriendsList] = useState({});
+  const [cardsSet, setCardsSet] = useState([0, 0.5, 1, 2, 3, 5, 7, 12]);
 
   return (
     <MainPage
@@ -16,6 +17,8 @@ const App = () => {
       setPeerManager={setPeerManager}
       myPeerId={myPeerId}
       setMyPeerId={setMyPeerId}
+      cardsSet={cardsSet}
+      setCardsSet={setCardsSet}
     />
   );
 };

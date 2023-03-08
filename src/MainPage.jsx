@@ -19,6 +19,8 @@ export const MainPage = ({
   setPeerManager,
   myPeerId,
   setMyPeerId,
+  cardsSet,
+  setCardsSet,
 }) => {
   const multiColumnDisplay = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const [myName, setMyName] = useState(getRandomNickname());
@@ -221,7 +223,7 @@ export const MainPage = ({
       );
 
       if (newFriendsList.length) {
-        friendsList[friendId].connection.send({
+        friendsList[friendId]?.connection?.send({
           name: myName,
           newFriends: newFriendsList,
         });
@@ -305,6 +307,7 @@ export const MainPage = ({
           chooseCard={chooseCard}
           myPeerId={myPeerId}
           chosenCards={chosenCards}
+          cardsSet={cardsSet}
         />
       </Box>
     </Box>

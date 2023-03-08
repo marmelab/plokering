@@ -11,6 +11,7 @@ export const ChooseCardZone = ({
   chooseCard,
   myPeerId,
   chosenCards,
+  cardsSet,
 }) => {
   const [cardValue, setCardValue] = useState(null);
 
@@ -23,7 +24,13 @@ export const ChooseCardZone = ({
     <MobileCard
       title="Planing poker"
       subtitle={`Choosen : ${cardValue || "none"}`}
-      content={<PlanningCards card={cardValue} setCard={setCardValue} />}
+      content={
+        <PlanningCards
+          card={cardValue}
+          setCard={setCardValue}
+          cardsSet={cardsSet}
+        />
+      }
       actions={
         <Button
           size="small"
@@ -34,7 +41,7 @@ export const ChooseCardZone = ({
           }
           onClick={sendCardToPeers}
         >
-          Choose this card
+          Validate this card
         </Button>
       }
     />

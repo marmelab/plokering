@@ -1,10 +1,11 @@
-import { Box, Card } from "@mui/material";
+import { Box, Card, useMediaQuery } from "@mui/material";
 
 import {
   MY_COLOR,
   MY_BACK_COLOR,
   FRIEND_COLOR,
   FRIEND_BACK_COLOR,
+  MEDIAQUERY_MOBILE_GAP,
 } from "../../constants";
 
 export const PlanningCard = ({
@@ -18,6 +19,7 @@ export const PlanningCard = ({
   bigCard,
   sx,
 }) => {
+  const desktopDisplay = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const middleNumber = totalNumber / 2;
 
   return (
@@ -25,10 +27,9 @@ export const PlanningCard = ({
       sx={{
         ...sx,
         display: "flex",
-        width: bigCard ? "120px" : "40px",
-        minWidth: bigCard ? "120px" : "40px",
-        //height: bigCard ? "195px" : "65px",
-        lineHeight: bigCard ? "195px" : "65px",
+        width: bigCard ? (desktopDisplay ? "120px" : "70px") : "40px",
+        minWidth: bigCard ? (desktopDisplay ? "120px" : "70px") : "40px",
+        lineHeight: bigCard ? (desktopDisplay ? "195px" : "110px") : "65px",
         fontFamily: "Verdana",
         fontSize: bigCard ? "75px" : "25px",
         fontWeight: "bold",
@@ -46,9 +47,9 @@ export const PlanningCard = ({
           : FRIEND_BACK_COLOR,
         cursor: selectCard ? "pointer" : "inherit",
         transform: `rotateZ(${
-          15 * (index - middleNumber + 0.5)
+          11 * (index - middleNumber + 0.5)
         }deg)  translateY(${
-          Math.pow(index - middleNumber + 0.5, 2) * (bigCard ? 15 : 5)
+          Math.pow(index - middleNumber + 0.5, 2) * (bigCard ? 12 : 4)
         }px)`,
         "&:hover": {
           zIndex: 100,
@@ -60,7 +61,11 @@ export const PlanningCard = ({
       {bigCard && playerName && (
         <Box
           component="p"
-          sx={{ position: "absolute", fontSize: "15px", top: "-97.5px" }}
+          sx={{
+            position: "absolute",
+            fontSize: "15px",
+            top: desktopDisplay ? "-97.5px" : "-58px",
+          }}
         >
           {isMe ? "Me" : playerName}
         </Box>

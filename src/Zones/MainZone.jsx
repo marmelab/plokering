@@ -27,11 +27,13 @@ export const MainZone = ({
     return <AwaitCard />;
   }
 
-  if (!areAllCardsChosen(friendsList, chosenCards)) {
+  const playersAwaited = getPlayersAwaited(friendsList, chosenCards);
+  if (playersAwaited.length) {
     return (
       <AwaitVoters
         myCardValue={chosenCards[peerId].card}
         myName={chosenCards[peerId].name}
+        playersAwaited={playersAwaited}
       />
     );
   }
@@ -71,7 +73,7 @@ export const MainZone = ({
       </Box>
       <Button
         size="small"
-        disabled={!areAllCardsChosen(friendsList, chosenCards)}
+        disabled={!!getPlayersAwaited(friendsList, chosenCards).length}
         onClick={resetCards}
       >
         Next estimation
@@ -80,16 +82,15 @@ export const MainZone = ({
   );
 };
 
-const areAllCardsChosen = (friendsList, chosenCards) => {
-  const playersNumber = 1 + Object.keys(friendsList || {}).length;
-  const players = Object.keys(chosenCards);
-  if (
-    players.length === playersNumber &&
-    !players.find((player) => {
-      chosenCards[player] === null || chosenCards[player] === undefined;
-    })
-  ) {
-    return true;
-  }
-  return false;
+const getPlayersAwaited = (friendsList, chosenCards) => {
+  const allPlayers = Object.keys(friendsList);
+  const playersOk = Object.keys(chosenCards);
+
+  const awaitedPlayers = allPlayers.filter(
+    (player) => !playersOk.includes(player)
+  );
+
+  return awaitedPlayers.map((player) => {
+    return friendsList[player].name;
+  });
 };

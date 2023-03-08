@@ -83,6 +83,16 @@ export const ConnectionZone = ({
               event.target.select();
             }}
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={spectateOnly}
+                onChange={handleSpectateOnly}
+                disabled={isRegisteredOk}
+              />
+            }
+            label="Spectate only"
+          />
           <Box
             sx={{ display: isHost ? "flex" : "none", flexDirection: "column" }}
           >
@@ -106,16 +116,6 @@ export const ConnectionZone = ({
                 ))}
               </RadioGroup>
             </FormControl>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={spectateOnly}
-                  onChange={handleSpectateOnly}
-                  disabled={isRegisteredOk}
-                />
-              }
-              label="Spectate only"
-            />
           </Box>
         </Box>
       }

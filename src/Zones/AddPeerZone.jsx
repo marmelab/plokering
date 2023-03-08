@@ -6,7 +6,12 @@ import { getRandomId, isRegistered } from "../tools";
 import { MobileCard } from "../uiComponents/Card";
 import { NameChip } from "../uiComponents/NameChip";
 
-export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
+export const AddPeerZone = ({
+  friendsList,
+  peerManager,
+  connectToPeer,
+  isHost,
+}) => {
   const [friendId, setFriendId] = useState(getRandomId());
 
   const handleFriendId = (event) => {
@@ -17,7 +22,7 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
 
   return (
     <MobileCard
-      title="Friends"
+      title="Peers"
       subtitle={`Number: ${friendsNumber}`}
       content={
         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -25,9 +30,10 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
             sx={{ marginBottom: "15px" }}
             type="number"
             step="1"
-            label="Friend Id"
+            label={isHost ? "New peers Id" : "Host id"}
             value={friendId}
             onChange={handleFriendId}
+            disabled={!isHost && Object.keys(friendsList).length}
             onFocus={(event) => {
               event.target.select();
             }}
@@ -56,10 +62,14 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
       actions={
         <Button
           size="small"
-          disabled={!isRegistered(peerManager) || !friendId}
+          disabled={
+            !isRegistered(peerManager) ||
+            !friendId ||
+            (!isHost && Object.keys(friendsList).length)
+          }
           onClick={connectToPeer(`${ID_PREFIX}_${friendId}`)}
         >
-          Connect to peer
+          {isHost ? "Connect a peer" : "Connect to host"}
         </Button>
       }
     />

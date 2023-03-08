@@ -304,6 +304,7 @@ export const MainPage = ({
             friendsList={friendsList}
             peerManager={peerManager}
             connectToPeer={connectToPeer}
+            isHost={isHost}
           />
         </Box>
       </Box>

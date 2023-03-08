@@ -28,6 +28,9 @@ export const AddPeerZone = ({ friendsList, peerManager, connectToPeer }) => {
             label="Friend Id"
             value={friendId}
             onChange={handleFriendId}
+            onFocus={(event) => {
+              event.target.select();
+            }}
           />
           <Box
             sx={{

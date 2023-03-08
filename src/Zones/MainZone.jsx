@@ -14,6 +14,8 @@ export const MainZone = ({
   chosenCards,
   peerId,
   resetCards,
+  isHost,
+  spectateOnly,
 }) => {
   if (!registeringOk) {
     return <AwaitRegistering />;
@@ -23,7 +25,7 @@ export const MainZone = ({
     return <AwaitFriend />;
   }
 
-  if (!isMyCardChosen(peerId, chosenCards)) {
+  if (!spectateOnly && !isMyCardChosen(peerId, chosenCards)) {
     return <AwaitCard />;
   }
 
@@ -31,8 +33,8 @@ export const MainZone = ({
   if (playersAwaited.length) {
     return (
       <AwaitVoters
-        myCardValue={chosenCards[peerId].card}
-        myName={chosenCards[peerId].name}
+        myCardValue={spectateOnly ? ":)" : chosenCards[peerId].card}
+        myName={spectateOnly ? "" : chosenCards[peerId].name}
         playersAwaited={playersAwaited}
       />
     );
@@ -71,19 +73,23 @@ export const MainZone = ({
           );
         })}
       </Box>
-      <Button
-        size="small"
-        disabled={!!getPlayersAwaited(friendsList, chosenCards).length}
-        onClick={resetCards}
-      >
-        Next estimation
-      </Button>
+      {isHost && (
+        <Button
+          size="small"
+          disabled={!!getPlayersAwaited(friendsList, chosenCards).length}
+          onClick={resetCards}
+        >
+          Next estimation
+        </Button>
+      )}
     </Box>
   );
 };
 
 const getPlayersAwaited = (friendsList, chosenCards) => {
-  const allPlayers = Object.keys(friendsList);
+  const allPlayers = Object.keys(friendsList).filter(
+    (friendKey) => !friendsList[friendKey].spectateOnly
+  );
   const playersOk = Object.keys(chosenCards);
 
   const awaitedPlayers = allPlayers.filter(

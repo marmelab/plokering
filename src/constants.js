@@ -41,3 +41,9 @@ export const NICKNAMES = [
   "Kim",
   "Lara",
 ];
+
+export const CARDS_SET_LIST = {
+  A: [0, 0.5, 1, 2, 3, 5],
+  B: [0, 1, 2, 3, 5, 8, 13, 21],
+  C: ["XS", "S", "M", "L", "XL", "XXL"],
+};

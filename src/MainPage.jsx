@@ -21,6 +21,10 @@ export const MainPage = ({
   setMyPeerId,
   cardsSet,
   setCardsSet,
+  isHost,
+  setHost,
+  spectateOnly,
+  setSpectateOnly,
 }) => {
   const multiColumnDisplay = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const [myName, setMyName] = useState(getRandomNickname());
@@ -61,7 +65,11 @@ export const MainPage = ({
 
   const chooseCard = (cardValue) => {
     Object.keys(friendsList).map((friendId) =>
-      friendsList[friendId].connection.send({ name: myName, card: cardValue })
+      friendsList[friendId].connection.send({
+        name: myName,
+        isHost,
+        card: cardValue,
+      })
     );
     setChosenCards((previous) => ({
       ...previous,
@@ -71,7 +79,11 @@ export const MainPage = ({
 
   const resetCards = () => {
     Object.keys(friendsList).map((friendId) =>
-      friendsList[friendId].connection.send({ name: myName, resetCards: true })
+      friendsList[friendId].connection.send({
+        name: myName,
+        isHost,
+        resetCards: true,
+      })
     );
     setChosenCards({});
   };
@@ -84,11 +96,11 @@ export const MainPage = ({
     setMyName(event.target.value);
   };
 
-  const updateFriendName = (name, friendId) => {
+  const updateFriend = (name, isHost, spectateOnly, friendId) => {
     //if (friendsList[friendId].name !== name) {
     setFriendsList((previous) => ({
       ...previous,
-      [friendId]: { ...previous[friendId], name },
+      [friendId]: { ...previous[friendId], name, isHost, spectateOnly },
     }));
     //}
   };
@@ -99,7 +111,13 @@ export const MainPage = ({
       author: { name: ADMIN_CODE, id: ADMIN_CODE },
       text: `Connection with [${conn.peer}]`,
     });
-    conn.send({ name: myName, message: `Hello, I'm new here` });
+    conn.send({
+      name: myName,
+      isHost,
+      spectateOnly,
+      cardsSet: JSON.stringify(cardsSet),
+      message: `Hello, I'm new here`,
+    });
   };
 
   const deconnectionMessage = (conn) => {
@@ -112,11 +130,26 @@ export const MainPage = ({
 
   const receiveData = (
     connection,
-    { name, message, card, resetCards, newFriends }
+    {
+      name,
+      isHost,
+      spectateOnly,
+      cardsSet,
+      message,
+      card,
+      resetCards,
+      newFriends,
+    }
   ) => {
-    updateFriendName(name, connection.peer);
+    updateFriend(name, isHost, spectateOnly, connection.peer);
     if (message) {
-      addMessage({ author: { name, id: connection.peer }, text: message });
+      addMessage({
+        author: { name, id: connection.peer, isHost },
+        text: message,
+      });
+    }
+    if (cardsSet && isHost) {
+      setCardsSet(JSON.parse(cardsSet));
     }
     if (card !== null && card !== undefined) {
       setChosenCards((previous) => ({
@@ -225,6 +258,7 @@ export const MainPage = ({
       if (newFriendsList.length) {
         friendsList[friendId]?.connection?.send({
           name: myName,
+          isHost,
           newFriends: newFriendsList,
         });
       }
@@ -257,6 +291,11 @@ export const MainPage = ({
             peerManager={peerManager}
             register={register}
             unRegister={unRegister}
+            setCardsSet={setCardsSet}
+            isHost={isHost}
+            setHost={setHost}
+            spectateOnly={spectateOnly}
+            setSpectateOnly={setSpectateOnly}
           />
 
           <AddPeerZone
@@ -282,6 +321,8 @@ export const MainPage = ({
           chosenCards={chosenCards}
           peerId={`${ID_PREFIX}_${myPeerId}`}
           resetCards={resetCards}
+          isHost={isHost}
+          spectateOnly={spectateOnly}
         />
       </Box>
 
@@ -300,15 +341,18 @@ export const MainPage = ({
           friendsList={friendsList}
           addMessage={addMessage}
           messages={messages}
+          isHost={isHost}
         />
 
-        <ChooseCardZone
-          friendsList={friendsList}
-          chooseCard={chooseCard}
-          myPeerId={myPeerId}
-          chosenCards={chosenCards}
-          cardsSet={cardsSet}
-        />
+        {!spectateOnly && (
+          <ChooseCardZone
+            friendsList={friendsList}
+            chooseCard={chooseCard}
+            myPeerId={myPeerId}
+            chosenCards={chosenCards}
+            cardsSet={cardsSet}
+          />
+        )}
       </Box>
     </Box>
   );

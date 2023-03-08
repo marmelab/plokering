@@ -33,7 +33,7 @@ export const AddPeerZone = ({
             label={isHost ? "New peers Id" : "Host id"}
             value={friendId}
             onChange={handleFriendId}
-            disabled={!isHost && Object.keys(friendsList).length}
+            disabled={!isHost && !!Object.keys(friendsList).length}
             onFocus={(event) => {
               event.target.select();
             }}
@@ -65,7 +65,7 @@ export const AddPeerZone = ({
           disabled={
             !isRegistered(peerManager) ||
             !friendId ||
-            (!isHost && Object.keys(friendsList).length)
+            (!isHost && !!Object.keys(friendsList).length)
           }
           onClick={connectToPeer(`${ID_PREFIX}_${friendId}`)}
         >

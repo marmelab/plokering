@@ -14,6 +14,7 @@ export const SendMessageZone = ({
   addMessage,
   messages,
   isHost,
+  spectateOnly,
 }) => {
   const visibleDefault = useMediaQuery(MEDIAQUERY_MOBILE_GAP);
   const [message, setMessage] = useState("");
@@ -29,6 +30,7 @@ export const SendMessageZone = ({
       friendsList[friendId].connection.send({
         name: myName,
         isHost,
+        spectateOnly,
         message: message,
       })
     );

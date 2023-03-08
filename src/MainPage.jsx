@@ -82,6 +82,7 @@ export const MainPage = ({
       friendsList[friendId].connection.send({
         name: myName,
         isHost,
+        spectateOnly,
         resetCards: true,
       })
     );
@@ -259,6 +260,7 @@ export const MainPage = ({
         friendsList[friendId]?.connection?.send({
           name: myName,
           isHost,
+          spectateOnly,
           newFriends: newFriendsList,
         });
       }
@@ -342,6 +344,7 @@ export const MainPage = ({
           addMessage={addMessage}
           messages={messages}
           isHost={isHost}
+          spectateOnly={spectateOnly}
         />
 
         {!spectateOnly && (

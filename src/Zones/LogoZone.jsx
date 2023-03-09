@@ -12,7 +12,7 @@ export const LogoZone = () => {
           color="text.primary"
           gutterBottom
         >
-          Plockering
+          Plokering
         </Typography>
       </Box>
     </>
